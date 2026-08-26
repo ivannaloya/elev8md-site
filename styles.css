@@ -779,10 +779,11 @@ section { position: relative; }
   gap: 44px 24px;
   text-align: left;
 }
-.lens__rays { display: inline-block; width: 56px; height: 56px; }
-.lens__rays svg { width: 100%; height: 100%; }
-.lens__rays line { stroke: var(--gold-dim); stroke-width: 1; opacity: 0.6; }
-.lens__rays circle { fill: none; stroke: var(--gold); stroke-width: 1; }
+.lens__icon { display: inline-block; width: 56px; height: 56px; }
+.lens__icon svg { width: 100%; height: 100%; }
+.lens__icon .lens__frame { fill: none; stroke: var(--gold-dim); stroke-width: 1; opacity: 0.6; }
+.lens__icon .lens__glyph { fill: none; stroke: var(--gold); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.lens__icon .lens__glyph--fill { fill: var(--gold); stroke: none; }
 .lens h4 {
   margin-top: 16px;
   font-family: var(--font-display);
@@ -893,20 +894,14 @@ section { position: relative; }
   border-left: 1px solid var(--sand-dim);
 }
 .wins__item:first-child { border-left: none; }
-.wins__photo {
-  width: 130px;
-  height: 130px;
-  border-radius: 50%;
-  overflow: hidden;
+.wins__icon {
+  width: 96px;
+  height: 96px;
   margin: 0 auto 22px;
-  border: 1px solid var(--gold-dim);
+  display: block;
 }
-.wins__photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: sepia(8%) saturate(88%) brightness(0.96);
-}
+.wins__icon .wins__frame { fill: none; stroke: var(--clay); stroke-width: 1; opacity: 0.6; }
+.wins__icon .wins__glyph { fill: none; stroke: var(--moss); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .wins__label {
   font-family: var(--font-display);
   font-style: italic;
