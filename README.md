@@ -1,4 +1,4 @@
-# Elev8MD Website
+# Elev8 Website
 
 Static site for elev8md.co — no build step, plain HTML/CSS/JS.
 
