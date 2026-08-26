@@ -256,10 +256,10 @@ button { font: inherit; cursor: pointer; }
 .hero h1 {
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: clamp(38px, 6.4vw, 78px);
-  line-height: 1.08;
+  font-size: clamp(44px, 7.4vw, 92px);
+  line-height: 1.04;
   letter-spacing: -0.01em;
-  max-width: 18ch;
+  max-width: 15ch;
 }
 .hero h1 em {
   font-style: italic;
@@ -421,12 +421,22 @@ section { position: relative; }
     linear-gradient(155deg, #2C3A28 0%, #1B2618 60%, #14201A 100%);
   border: 1px solid var(--gold-dim);
 }
+.frame img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 25%;
+  filter: sepia(8%) saturate(88%) brightness(0.94);
+}
 .frame::after {
   content: "";
   position: absolute;
   inset: 10px;
   border: 1px solid rgba(146,161,120,0.25);
   pointer-events: none;
+  z-index: 1;
 }
 .frame__badge {
   position: absolute;
@@ -589,8 +599,19 @@ section { position: relative; }
   inset: 10px;
   border: 1px solid rgba(146,161,120,0.22);
   pointer-events: none;
+  z-index: 1;
 }
 .service__visual .mark { color: var(--gold-dim); width: 26%; opacity: 0.75; }
+.service__visual img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  filter: sepia(8%) saturate(88%) brightness(0.94);
+}
+.service__visual--photo .mark { display: none; }
 
 /* ============================================================
    Pricing
@@ -890,16 +911,28 @@ section { position: relative; }
   padding-top: 28px;
 }
 .team__photo {
-  width: 76px;
-  height: 76px;
-  border-radius: 50%;
+  position: relative;
+  width: 100%;
+  max-width: 240px;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
   background: var(--ink);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 22px;
+  margin-bottom: 24px;
+  border: 1px solid var(--gold-dim);
 }
 .team__photo .mark { color: var(--gold); width: 46%; }
+.team__photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: sepia(8%) saturate(88%) brightness(0.94);
+}
+.team__photo--photo .mark { display: none; }
 .team__card h3 {
   font-family: var(--font-display);
   font-weight: 500;
