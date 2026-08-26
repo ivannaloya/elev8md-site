@@ -1,18 +1,18 @@
 # Elev8MD Website
 
-Static site for elev8md.com — no build step, plain HTML/CSS/JS.
+Static site for elev8md.co — no build step, plain HTML/CSS/JS.
 
 ## Files
 - `index.html` — the site
 - `privacy.html`, `terms.html` — legal pages (drafts, need attorney review before launch)
 - `styles.css`, `script.js` — styling and interactions
 - `images/` — drop real photography here (see naming convention below)
-- `CNAME` — points GitHub Pages at elev8md.com
+- `CNAME` — points GitHub Pages at elev8md.co
 
 ## Deployment (GitHub Pages)
 This repo is set up to deploy automatically to GitHub Pages on every push to `main`.
 
-**To point elev8md.com at it:** add these DNS records at your domain registrar (GoDaddy, Namecheap, etc.):
+**To point elev8md.co at it:** add these DNS records at your domain registrar (GoDaddy, Namecheap, etc.):
 
 | Type  | Name | Value                  |
 |-------|------|------------------------|
