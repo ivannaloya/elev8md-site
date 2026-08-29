@@ -301,6 +301,11 @@ button { font: inherit; cursor: pointer; }
   color: var(--ivory-text);
 }
 .btn--ghost:hover { border-color: var(--gold-bright); color: var(--gold-bright); transform: translateY(-2px); }
+.btn--ghost-dark {
+  border: 1px solid var(--clay);
+  color: var(--ink-text);
+}
+.btn--ghost-dark:hover { border-color: var(--moss); color: var(--moss); background: rgba(146,161,120,0.08); transform: translateY(-2px); }
 
 .hero__strip {
   position: relative;
