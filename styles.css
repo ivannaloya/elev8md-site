@@ -353,7 +353,7 @@ section { position: relative; }
   font-weight: 400;
   font-size: clamp(26px, 3vw, 38px);
   line-height: 1.32;
-  color: var(--ink-text);
+  color: var(--ink-text-mute);
   margin: 22px 0 30px;
   max-width: 15ch;
 }
@@ -1144,6 +1144,16 @@ section { position: relative; }
   margin-left: auto;
   margin-right: auto;
   line-height: 1.5;
+}
+.team__boundary cite {
+  display: block;
+  margin-top: 16px;
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--clay);
 }
 
 /* ============================================================
