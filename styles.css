@@ -958,10 +958,9 @@ section { position: relative; }
 .wins__leaf--bl { bottom: 8%; left: 3%; transform: rotate(-160deg); }
 .wins__head { max-width: 60ch; margin: 0 auto; }
 .wins__title {
-  font-family: var(--font-body);
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  font-size: clamp(24px, 3vw, 32px);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(28px, 3.6vw, 40px);
   color: var(--ink-text);
   margin-top: 18px;
 }
