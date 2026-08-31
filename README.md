@@ -12,7 +12,7 @@ Static site for elev8md.co — no build step, plain HTML/CSS/JS.
 ## Deployment (GitHub Pages)
 This repo is set up to deploy automatically to GitHub Pages on every push to `main`.
 
-**To point elev8md.co at it:** add these DNS records at your domain registrar (GoDaddy, Namecheap, etc.):
+**To point elev8md.co at it:** add these DNS records at your domain registrar (Namecheap):
 
 | Type  | Name | Value                  |
 |-------|------|------------------------|
@@ -20,7 +20,7 @@ This repo is set up to deploy automatically to GitHub Pages on every push to `ma
 | A     | @    | 185.199.109.153        |
 | A     | @    | 185.199.110.153        |
 | A     | @    | 185.199.111.153        |
-| CNAME | www  | `<github-username>.github.io` |
+| CNAME | www  | `ivannaloya.github.io` |
 
 DNS changes can take up to 24-48 hours to propagate. Once live, GitHub Pages auto-issues an SSL certificate for the domain.
 
