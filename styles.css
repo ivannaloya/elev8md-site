@@ -99,6 +99,21 @@ button { font: inherit; cursor: pointer; }
   margin-top: 20px;
 }
 .services__head-row .badge-oval { flex: none; padding: 12px 28px; font-size: 16px; }
+.services__intro {
+  padding-bottom: clamp(40px, 6vw, 64px);
+  margin-bottom: clamp(40px, 6vw, 64px);
+  border-bottom: 1px solid rgba(146,161,120,0.22);
+}
+.services-section { position: relative; overflow: hidden; background: linear-gradient(160deg, var(--moss) 0%, var(--ink) 55%); }
+.services-section__glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(50% 45% at 15% 0%, rgba(198,161,91,0.10), transparent 60%),
+    radial-gradient(45% 50% at 100% 100%, rgba(146,161,120,0.16), transparent 65%);
+  pointer-events: none;
+}
+.services-section .wrap { position: relative; z-index: 1; }
 
 /* ============================================================
    Infinity signature mark — reused as logo, watermark, dividers
@@ -616,6 +631,10 @@ section { position: relative; }
   grid-template-columns: 0.85fr 1.15fr;
   gap: clamp(32px, 6vw, 90px);
   align-items: center;
+}
+.service:first-of-type {
+  border-top: none;
+  padding-top: 0;
 }
 .service:last-of-type { border-bottom: 1px solid rgba(146,161,120,0.22); }
 .service:nth-of-type(even) { grid-template-columns: 1.15fr 0.85fr; }
