@@ -36,7 +36,11 @@
   #btn .label { font-family: 'Anton'; font-size: 30px; letter-spacing: 0.077em; color: #fff; margin-left: 20px; padding-top: 2px; }
   #btn .label em { font-style: normal; color: var(--teal); }
 
-  #tag { position: absolute; left: 67px; top: 1033px; font-family: 'Inter'; font-weight: 400; font-size: 14px;
+  #visit { position: absolute; left: 67px; top: 994px; font-family: 'Inter'; font-weight: 300; font-size: 20px;
+           line-height: 28px; color: #fff; white-space: nowrap; }
+  #visit b { font-weight: 600; color: var(--teal); }
+
+  #tag { position: absolute; left: 67px; top: 1066px; font-family: 'Inter'; font-weight: 400; font-size: 14px;
          letter-spacing: 0.31em; color: var(--teal); opacity: 0.85; white-space: nowrap; }
 </style>
 </head>
@@ -67,6 +71,8 @@
     </div>
   </div>
 
+  <div id="visit"></div>
+
   <div id="tag">WHERE PROXIMITY CREATES OPPORTUNITY</div>
 </div>
 
@@ -81,6 +87,7 @@
     ],
     sub: "Send them our way. We’d love to share what partnering with Friends of Medicine looks like.",
     button: 'SEND US A <em>DM</em>',
+    visit: 'Visit us at <b>friendsofmed.com/sponsor</b> for more info',
   };
 
   const headline = document.getElementById('headline');
@@ -96,6 +103,7 @@
   });
   document.getElementById('sub').textContent = COPY.sub;
   document.getElementById('btnlabel').innerHTML = COPY.button;
+  document.getElementById('visit').innerHTML = COPY.visit || '';
 
   // Size the pill outline to the button contents.
   function layoutButton() {
@@ -160,7 +168,11 @@
     const label = document.getElementById('btnlabel');
     label.style.opacity = pt; label.style.transform = `translateX(${(1 - pt) * -10}px)`;
 
-    document.getElementById('tag').style.opacity = 0.85 * easeOut(prog(t, 3.9, 4.4));
+    const pv = easeOut(prog(t, 3.9, 4.4));
+    const visit = document.getElementById('visit');
+    visit.style.opacity = pv; visit.style.transform = `translateY(${(1 - pv) * 10}px)`;
+
+    document.getElementById('tag').style.opacity = 0.85 * easeOut(prog(t, 4.25, 4.75));
   };
 
   window.render(new URLSearchParams(location.search).has('t') ? +new URLSearchParams(location.search).get('t') : 9);
