@@ -1,0 +1,169 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: 'Anton'; src: url(fonts/anton.woff2) format('woff2'); }
+  @font-face { font-family: 'Inter'; font-style: italic; font-weight: 300; src: url(fonts/inter-italic.woff2) format('woff2'); }
+  @font-face { font-family: 'Inter'; font-style: normal; font-weight: 100 900; src: url(fonts/inter.woff2) format('woff2'); }
+
+  :root { --teal: #3d8b91; --white: #ffffff; }
+  html, body { margin: 0; padding: 0; background: #000; }
+  #stage { position: relative; width: 720px; height: 1280px; overflow: hidden; background: #000; }
+
+  #bg { position: absolute; inset: 0; }
+  #bg circle { fill: none; stroke: rgba(255,255,255,0.32); stroke-width: 1.4; }
+
+  #logo { position: absolute; left: 55px; top: 140px; width: 115px; height: 115px; }
+
+  #kicker { position: absolute; left: 180px; top: 166px; font-family: 'Anton'; font-size: 40px; line-height: 56px;
+            letter-spacing: 0.17em; color: var(--teal); white-space: nowrap; }
+
+  #rule { position: absolute; left: 67px; top: 261px; width: 569px; height: 2px; background: #fff; transform-origin: left center; }
+
+  #headline { position: absolute; left: 67px; top: 301px; font-family: 'Anton'; font-size: 70px; line-height: 71px;
+              color: var(--teal); text-transform: uppercase; }
+  .line { display: block; overflow: hidden; height: 71px; white-space: nowrap; }
+  .line > span { display: inline-block; }
+  .w { color: var(--teal); }
+
+  #sub { position: absolute; left: 67px; top: 674px; width: 470px; font-family: 'Inter'; font-style: italic; font-weight: 300;
+         font-size: 23px; line-height: 35px; color: #fff; }
+
+  #btn { position: absolute; left: 67px; top: 887px; height: 79px; }
+  #btnsvg { position: absolute; left: 0; top: 0; overflow: visible; }
+  #btn .inner { position: relative; display: inline-flex; align-items: center; height: 79px; padding: 0 34px 0 28px; }
+  #btn .label { font-family: 'Anton'; font-size: 30px; letter-spacing: 0.077em; color: #fff; margin-left: 20px; padding-top: 2px; }
+  #btn .label em { font-style: normal; color: var(--teal); }
+
+  #tag { position: absolute; left: 67px; top: 1033px; font-family: 'Inter'; font-weight: 400; font-size: 14px;
+         letter-spacing: 0.31em; color: var(--teal); opacity: 0.85; white-space: nowrap; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <svg id="bg" width="720" height="1280" viewBox="0 0 720 1280">
+    <circle cx="502" cy="475" r="293" />
+    <circle cx="542" cy="472" r="240" />
+    <circle cx="728" cy="1083" r="293" />
+    <circle cx="742" cy="1194" r="301" />
+  </svg>
+
+  <img id="logo" src="logo.png" alt="">
+  <div id="kicker">PARTNER WITH US</div>
+  <div id="rule"></div>
+
+  <div id="headline"></div>
+
+  <div id="sub"></div>
+
+  <div id="btn">
+    <svg id="btnsvg"><rect id="btnrect" rx="39.5" ry="39.5" fill="none" stroke="#3d8b91" stroke-width="2"/></svg>
+    <div class="inner" id="btninner">
+      <svg id="icon" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#3d8b91" stroke-width="1.8" stroke-linejoin="round">
+        <path d="M12 3.2c4.9 0 8.8 3.6 8.8 8.1s-3.9 8.1-8.8 8.1c-1.3 0-2.6-.3-3.7-.8L3.6 20l1.3-4.1c-.7-1.3-1.1-2.8-1.1-4.5C3.8 6.8 7.4 3.2 12 3.2z"/>
+      </svg>
+      <div class="label" id="btnlabel"></div>
+    </div>
+  </div>
+
+  <div id="tag">WHERE PROXIMITY CREATES OPPORTUNITY</div>
+</div>
+
+<script>
+  // Copy. Each headline line is a list of [text, isWhite] pieces.
+  const COPY = window.COPY || {
+    lines: [
+      [["Know a", false]],
+      [["Partner", true], [" who", false]],
+      [["needs a", false]],
+      [["Trusted partner?", true]],
+    ],
+    sub: "Send them our way. We’d love to share what partnering with Friends of Medicine looks like.",
+    button: 'SEND US A <em>DM</em>',
+  };
+
+  const headline = document.getElementById('headline');
+  COPY.lines.forEach(pieces => {
+    const line = document.createElement('span'); line.className = 'line';
+    const inner = document.createElement('span');
+    pieces.forEach(([text, white]) => {
+      const s = document.createElement('span'); s.textContent = text;
+      if (white) s.className = 'w';
+      inner.appendChild(s);
+    });
+    line.appendChild(inner); headline.appendChild(line);
+  });
+  document.getElementById('sub').textContent = COPY.sub;
+  document.getElementById('btnlabel').innerHTML = COPY.button;
+
+  // Size the pill outline to the button contents.
+  function layoutButton() {
+    const inner = document.getElementById('btninner');
+    const w = inner.offsetWidth, h = inner.offsetHeight;
+    const svg = document.getElementById('btnsvg'), rect = document.getElementById('btnrect');
+    svg.setAttribute('width', w); svg.setAttribute('height', h);
+    rect.setAttribute('x', 1); rect.setAttribute('y', 1);
+    rect.setAttribute('width', w - 2); rect.setAttribute('height', h - 2);
+    return rect.getTotalLength();
+  }
+
+  const clamp = v => Math.max(0, Math.min(1, v));
+  const prog = (t, a, b) => clamp((t - a) / (b - a));
+  const easeOut = p => 1 - Math.pow(1 - p, 3);
+  const easeInOut = p => p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+  const mix = (a, b, p) => a.map((v, i) => Math.round(v + (b[i] - v) * p));
+  const TEAL = [61, 139, 145], WHITE = [255, 255, 255];
+
+  let btnLen = 0;
+  const circles = [...document.querySelectorAll('#bg circle')];
+  circles.forEach(c => { const L = 2 * Math.PI * c.r.baseVal.value; c.dataset.len = L; c.style.strokeDasharray = L; });
+
+  // Render the frame at time t (seconds). Mirrors the original story's timing.
+  window.render = function (t) {
+    btnLen = layoutButton();
+
+    const logo = document.getElementById('logo');
+    const pl = easeOut(prog(t, 0.25, 0.65));
+    logo.style.opacity = pl; logo.style.transform = `scale(${0.85 + 0.15 * pl})`;
+
+    const kick = easeInOut(prog(t, 0.55, 1.15));
+    document.getElementById('kicker').style.clipPath = `inset(0 ${100 - kick * 100}% 0 0)`;
+
+    document.getElementById('rule').style.transform = `scaleX(${easeInOut(prog(t, 0.95, 1.45))})`;
+
+    circles.forEach((c, i) => {
+      const p = easeInOut(prog(t, 1.0 + i * 0.12, 2.2 + i * 0.12));
+      c.style.strokeDashoffset = c.dataset.len * (1 - p);
+    });
+
+    document.querySelectorAll('.line > span').forEach((s, i) => {
+      const p = easeOut(prog(t, 1.1 + i * 0.2, 1.6 + i * 0.2));
+      s.style.transform = `translateY(${(1 - p) * 72}px)`;
+    });
+
+    document.querySelectorAll('.w').forEach((w, i) => {
+      const p = easeInOut(prog(t, 2.0 + i * 0.15, 2.45 + i * 0.15));
+      w.style.color = `rgb(${mix(TEAL, WHITE, p).join(',')})`;
+    });
+
+    const ps = easeOut(prog(t, 2.55, 3.05));
+    const sub = document.getElementById('sub');
+    sub.style.opacity = ps; sub.style.transform = `translateY(${(1 - ps) * 12}px)`;
+
+    const pb = easeInOut(prog(t, 3.1, 3.75));
+    const rect = document.getElementById('btnrect');
+    rect.style.strokeDasharray = btnLen; rect.style.strokeDashoffset = btnLen * (1 - pb);
+    const pi = easeOut(prog(t, 3.45, 3.8));
+    document.getElementById('icon').style.opacity = pi;
+    const pt = easeOut(prog(t, 3.6, 3.95));
+    const label = document.getElementById('btnlabel');
+    label.style.opacity = pt; label.style.transform = `translateX(${(1 - pt) * -10}px)`;
+
+    document.getElementById('tag').style.opacity = 0.85 * easeOut(prog(t, 3.9, 4.4));
+  };
+
+  window.render(new URLSearchParams(location.search).has('t') ? +new URLSearchParams(location.search).get('t') : 9);
+</script>
+</body>
+</html>
