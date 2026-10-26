@@ -1,0 +1,367 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: 'Anton'; src: url(../trusted-partner/fonts/anton.woff2) format('woff2'); }
+  @font-face { font-family: 'Inter'; font-style: italic; font-weight: 300; src: url(../trusted-partner/fonts/inter-italic.woff2) format('woff2'); }
+  @font-face { font-family: 'Inter'; font-style: normal; font-weight: 100 900; src: url(../trusted-partner/fonts/inter.woff2) format('woff2'); }
+
+  :root { --teal: #3d8b91; --orange: #f2802e; --white: #ffffff; }
+  html, body { margin: 0; padding: 0; background: #000; }
+  #stage { position: relative; width: 720px; height: 1280px; overflow: hidden; background: #000; }
+
+  #bg { position: absolute; inset: 0; }
+  #bg circle { fill: none; stroke: rgba(255,255,255,0.28); stroke-width: 1.4; }
+
+  #moon { position: absolute; left: 540px; top: 1068px; width: 190px; height: 190px; border-radius: 50%;
+          background: radial-gradient(circle at 38% 35%, #ffe2b0 0%, #f6a85a 45%, #e0712a 78%, #b9561c 100%);
+          box-shadow: 0 0 70px 18px rgba(242,128,46,0.33), 0 0 160px 60px rgba(242,128,46,0.12); }
+  #moon i { position: absolute; border-radius: 50%; background: rgba(150,60,10,0.22); }
+
+  .fog { position: absolute; width: 760px; height: 260px; border-radius: 50%;
+         background: radial-gradient(closest-side, rgba(255,255,255,0.10), rgba(255,255,255,0)); }
+
+  #bats { position: absolute; inset: 0; overflow: visible; }
+  #bats path { fill: var(--teal); }
+
+  #spider { position: absolute; left: 0; top: 0; overflow: visible; }
+
+  #logo { position: absolute; left: 55px; top: 140px; width: 115px; height: 115px; }
+
+  #kicker { position: absolute; left: 180px; top: 166px; font-family: 'Anton'; font-size: 40px; line-height: 56px;
+            letter-spacing: 0.17em; color: var(--teal); white-space: nowrap; }
+
+  #rule { position: absolute; left: 67px; top: 261px; width: 569px; height: 2px; background: #fff; transform-origin: left center; }
+
+  #flow { position: absolute; left: 67px; top: 301px; width: 586px; }
+  #headline { font-family: 'Anton'; font-size: 70px; line-height: 71px; color: var(--teal); text-transform: uppercase; }
+  .line { display: block; overflow: hidden; height: 71px; white-space: nowrap; }
+  .line > span { display: inline-block; }
+
+  #sub { margin-top: 74px; width: 520px; font-family: 'Inter'; font-style: italic; font-weight: 300;
+         font-size: 23px; line-height: 35px; color: #fff; }
+  #sub.stack { font-size: 28px; line-height: 44px; }
+  #sub .s { display: block; }
+
+  #rows { margin-top: 64px; }
+  .row { display: flex; align-items: center; height: 58px; border-bottom: 1px solid rgba(61,139,145,0.45); }
+  .row:first-child { border-top: 1px solid rgba(61,139,145,0.45); }
+  .row svg { flex: none; }
+  .row span { margin-left: 18px; font-family: 'Anton'; font-size: 28px; letter-spacing: 0.08em; color: #fff; padding-top: 2px; }
+  .row span em { font-style: normal; color: var(--orange); }
+
+  #btn { position: absolute; left: 67px; top: 887px; height: 79px; }
+  #btnsvg { position: absolute; left: 0; top: 0; overflow: visible; }
+  #btn .inner { position: relative; display: inline-flex; align-items: center; height: 79px; padding: 0 34px 0 28px; }
+  #btn .label { font-family: 'Anton'; font-size: 30px; letter-spacing: 0.077em; color: #fff; margin-left: 20px; padding-top: 2px; white-space: nowrap; }
+  #btn .label em { font-style: normal; color: var(--teal); }
+  #btn .label b { font-weight: normal; color: var(--orange); }
+
+  #visit { position: absolute; left: 67px; top: 994px; font-family: 'Inter'; font-weight: 300; font-size: 20px;
+           line-height: 28px; color: #fff; white-space: nowrap; }
+  #visit b { font-weight: 600; color: var(--teal); }
+
+  #tag { position: absolute; left: 67px; top: 1066px; font-family: 'Inter'; font-weight: 400; font-size: 14px;
+         letter-spacing: 0.31em; color: var(--teal); opacity: 0.85; white-space: nowrap; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="fog" id="fog1" style="top: 1010px"></div>
+  <div class="fog" id="fog2" style="top: 1090px"></div>
+
+  <svg id="bg" width="720" height="1280" viewBox="0 0 720 1280">
+    <circle cx="502" cy="475" r="293" />
+    <circle cx="542" cy="472" r="240" />
+    <circle cx="728" cy="1083" r="293" />
+    <circle cx="742" cy="1194" r="301" />
+  </svg>
+
+  <div id="moon">
+    <i style="left: 46px; top: 58px; width: 34px; height: 34px"></i>
+    <i style="left: 112px; top: 40px; width: 20px; height: 20px"></i>
+    <i style="left: 98px; top: 112px; width: 44px; height: 44px"></i>
+    <i style="left: 40px; top: 130px; width: 16px; height: 16px"></i>
+  </div>
+
+  <div class="fog" id="fog3" style="top: 1150px"></div>
+
+  <svg id="bats" width="720" height="1280" viewBox="0 0 720 1280"></svg>
+
+  <svg id="spider" width="720" height="1280" viewBox="0 0 720 1280">
+    <g id="spiderSwing">
+      <line id="thread" x1="0" y1="0" x2="0" y2="0" stroke="rgba(255,255,255,0.55)" stroke-width="1.2"/>
+      <g id="spiderBody" fill="none" stroke="#d9d9d9" stroke-width="1.6" stroke-linecap="round">
+        <path d="M-4 -3 L-12 -10 L-16 -4 M-4 0 L-14 -2 L-18 4 M-4 2 L-13 6 L-15 13 M-3 4 L-9 11 L-9 18
+                 M4 -3 L12 -10 L16 -4 M4 0 L14 -2 L18 4 M4 2 L13 6 L15 13 M3 4 L9 11 L9 18"/>
+        <ellipse cx="0" cy="2" rx="6" ry="7.5" fill="#d9d9d9" stroke="none"/>
+        <circle cx="0" cy="-6" r="3.6" fill="#d9d9d9" stroke="none"/>
+        <circle cx="-1.4" cy="-6.6" r="0.9" fill="#f2802e" stroke="none"/>
+        <circle cx="1.4" cy="-6.6" r="0.9" fill="#f2802e" stroke="none"/>
+      </g>
+    </g>
+  </svg>
+
+  <img id="logo" src="../trusted-partner/logo.png" alt="">
+  <div id="kicker"></div>
+  <div id="rule"></div>
+
+  <div id="flow">
+    <div id="headline"></div>
+    <div id="sub"></div>
+    <div id="rows"></div>
+  </div>
+
+  <div id="btn">
+    <svg id="btnsvg"><rect id="btnrect" rx="39.5" ry="39.5" fill="none" stroke="#3d8b91" stroke-width="2"/></svg>
+    <div class="inner" id="btninner">
+      <svg id="icon" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#3d8b91" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"></svg>
+      <div class="label" id="btnlabel"></div>
+    </div>
+  </div>
+
+  <div id="visit"></div>
+  <div id="tag">WHERE PROXIMITY CREATES OPPORTUNITY</div>
+</div>
+
+<script>
+  const ICONS = {
+    mail: '<rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.6 6.6l8.4 6.4 8.4-6.4"/>',
+    calendar: '<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/>',
+    pin: '<path d="M12 21s-6.5-6.2-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 14.8 12 21 12 21z"/><circle cx="12" cy="9.8" r="2.4"/>',
+    mask: '<path d="M2.5 8.5c3-1.6 6.2-1.6 9.5 0 3.3-1.6 6.5-1.6 9.5 0 0 5-2.6 8-5.6 8-1.8 0-2.8-1.3-3.9-2.7-1.1 1.4-2.1 2.7-3.9 2.7-3 0-5.6-3-5.6-8z"/><path d="M6.3 11.2c.9-.6 2-.6 2.9 0M14.8 11.2c.9-.6 2-.6 2.9 0"/>',
+    moon: '<path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/>',
+  };
+
+  // Each headline line is a list of [text, color] pieces; color is teal, white or orange.
+  // Pieces start teal and light up to their color, like the brand's other stories.
+  const STORIES = {
+    afraid: {
+      kicker: 'UNWIND THURSDAY',
+      lines: [
+        [['Fort Lauderdale,', 'teal']],
+        [['Don’t be', 'white']],
+        [['afraid.', 'orange', 'flicker', 1.7]],
+      ],
+      sub: ['We come to unwind.', 'To let go.', 'Not to be afraid.'],
+      button: { icon: 'moon', html: '<b>HALLOWEEN EDITION</b> • THU OCT 29' },
+    },
+    invite: {
+      kicker: 'YOU’RE INVITED',
+      lines: [
+        [['Unwind', 'white']],
+        [['Thursday', 'teal']],
+        [['Halloween', 'orange', 'flicker']],
+        [['Edition', 'white']],
+      ],
+      rows: [
+        { icon: 'calendar', html: 'THURSDAY, <em>OCTOBER 29</em>' },
+        { icon: 'pin', html: 'FORT LAUDERDALE' },
+        { icon: 'mask', html: 'COSTUMES <em>REQUIRED</em>' },
+      ],
+      button: { icon: 'mail', html: 'RSVP <em>INFO@FRIENDSOFMED.COM</em>' },
+    },
+    costume: {
+      kicker: 'HALLOWEEN EDITION',
+      lines: [
+        [['Come as', 'teal']],
+        [['anyone.', 'orange', 'flicker']],
+        [['Leave as', 'teal']],
+        [['friends.', 'white']],
+      ],
+      sub: 'Unwind Thursday goes Halloween this week in Fort Lauderdale. Costumes on. Guards down.',
+      button: { icon: 'mask', html: 'THIS THURSDAY • <b>OCTOBER 29</b>' },
+    },
+    partner: {
+      kicker: 'PARTNER WITH US',
+      lines: [
+        [['It’s not', 'teal']],
+        [['too late', 'orange', 'flicker']],
+        [['to partner', 'teal']],
+        [['with us.', 'white']],
+      ],
+      sub: 'Put your brand in the room at Unwind Thursday: Halloween Edition, this Thursday, October 29 in Fort Lauderdale.',
+      button: { icon: 'mail', html: 'EMAIL <em>INFO@FRIENDSOFMED.COM</em>' },
+      visit: 'Visit us at <b>friendsofmed.com/sponsor</b> for more info',
+    },
+  };
+
+  const params = new URLSearchParams(location.search);
+  const S = STORIES[params.get('story') || 'afraid'];
+
+  document.getElementById('kicker').textContent = S.kicker;
+
+  const headline = document.getElementById('headline');
+  S.lines.forEach(pieces => {
+    const line = document.createElement('span'); line.className = 'line';
+    const inner = document.createElement('span');
+    const scale = pieces[0][3] || 1;
+    if (scale !== 1) { line.style.height = `${71 * scale}px`; line.style.fontSize = `${70 * scale}px`; line.style.lineHeight = `${71 * scale}px`; }
+    pieces.forEach(([text, color, fx]) => {
+      const s = document.createElement('span'); s.textContent = text;
+      s.dataset.color = color; if (fx) s.dataset.fx = fx;
+      inner.appendChild(s);
+    });
+    line.appendChild(inner); headline.appendChild(line);
+  });
+
+  const sub = document.getElementById('sub');
+  if (Array.isArray(S.sub)) {
+    sub.className = 'stack';
+    S.sub.forEach(t => { const s = document.createElement('span'); s.className = 's'; s.textContent = t; sub.appendChild(s); });
+  } else if (S.sub) {
+    const s = document.createElement('span'); s.className = 's'; s.textContent = S.sub; sub.appendChild(s);
+  } else {
+    sub.style.display = 'none';
+  }
+
+  const rows = document.getElementById('rows');
+  (S.rows || []).forEach(r => {
+    const row = document.createElement('div'); row.className = 'row';
+    row.innerHTML = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3d8b91" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">${ICONS[r.icon]}</svg><span>${r.html}</span>`;
+    rows.appendChild(row);
+  });
+  if (!S.rows) rows.style.display = 'none';
+
+  document.getElementById('icon').innerHTML = ICONS[S.button.icon];
+  document.getElementById('btnlabel').innerHTML = S.button.html;
+  document.getElementById('visit').innerHTML = S.visit || '';
+
+  // Bats fly up out of the moon on staggered loops.
+  const BAT = 'M-15 0C-13-3-10-4-7-3C-8-1-8 1-6 2C-4 0-2-1-1-3L0-1L1-3C2-1 4 0 6 2C8 1 8-1 7-3C10-4 13-3 15 0C12 0 10 2 9 5C7 3 4 3 2 5C1 4-1 4-2 5C-4 3-7 3-9 5C-10 2-12 0-15 0Z';
+  const batsSvg = document.getElementById('bats');
+  const BATS = [
+    { start: 2.0, dur: 4.2, dx: -150, scale: 1.1, wob: 18, flap: 9 },
+    { start: 2.7, dur: 5.0, dx: 60, scale: 0.8, wob: 12, flap: 11 },
+    { start: 3.6, dur: 4.6, dx: -60, scale: 1.4, wob: 22, flap: 8 },
+    { start: 5.2, dur: 4.4, dx: 90, scale: 0.9, wob: 15, flap: 10 },
+    { start: 6.4, dur: 4.8, dx: -120, scale: 1.2, wob: 20, flap: 9 },
+  ];
+  BATS.forEach(b => {
+    const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    p.setAttribute('d', BAT); batsSvg.appendChild(p); b.el = p;
+  });
+
+  function layoutButton() {
+    const inner = document.getElementById('btninner');
+    const w = inner.offsetWidth, h = inner.offsetHeight;
+    const svg = document.getElementById('btnsvg'), rect = document.getElementById('btnrect');
+    svg.setAttribute('width', w); svg.setAttribute('height', h);
+    rect.setAttribute('x', 1); rect.setAttribute('y', 1);
+    rect.setAttribute('width', w - 2); rect.setAttribute('height', h - 2);
+    return rect.getTotalLength();
+  }
+
+  const clamp = v => Math.max(0, Math.min(1, v));
+  const prog = (t, a, b) => clamp((t - a) / (b - a));
+  const easeOut = p => 1 - Math.pow(1 - p, 3);
+  const easeInOut = p => p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+  const elastic = p => p === 0 || p === 1 ? p : Math.pow(2, -9 * p) * Math.sin((p * 10 - 0.75) * (2 * Math.PI) / 3) + 1;
+  const mix = (a, b, p) => a.map((v, i) => Math.round(v + (b[i] - v) * p));
+  const RGB = { teal: [61, 139, 145], white: [255, 255, 255], orange: [242, 128, 46] };
+  // Deterministic flicker: mostly lit, with brief dips like a failing bulb.
+  const flicker = t => {
+    const n = Math.sin(t * 37.1) * Math.sin(t * 11.3 + 1.7) * Math.sin(t * 5.9 + 0.4);
+    return n > 0.42 ? 0.35 : 1;
+  };
+
+  const circles = [...document.querySelectorAll('#bg circle')];
+  circles.forEach(c => { const L = 2 * Math.PI * c.r.baseVal.value; c.dataset.len = L; c.style.strokeDasharray = L; });
+
+  window.render = function (t) {
+    const btnLen = layoutButton();
+
+    const pl = easeOut(prog(t, 0.25, 0.65));
+    const logo = document.getElementById('logo');
+    logo.style.opacity = pl; logo.style.transform = `scale(${0.85 + 0.15 * pl})`;
+
+    document.getElementById('kicker').style.clipPath = `inset(0 ${100 - easeInOut(prog(t, 0.55, 1.15)) * 100}% 0 0)`;
+    document.getElementById('rule').style.transform = `scaleX(${easeInOut(prog(t, 0.95, 1.45))})`;
+
+    circles.forEach((c, i) => {
+      const p = easeInOut(prog(t, 1.0 + i * 0.12, 2.2 + i * 0.12));
+      c.style.strokeDashoffset = c.dataset.len * (1 - p);
+    });
+
+    // Harvest moon rises with a slow breathing glow.
+    const pm = easeOut(prog(t, 0.6, 2.2));
+    const moon = document.getElementById('moon');
+    moon.style.opacity = pm;
+    moon.style.transform = `translateY(${(1 - pm) * 70}px) scale(${1 + 0.015 * Math.sin(t * 1.6)})`;
+
+    // Fog drifts slowly across the bottom.
+    [[1, 0.7, -40, 1.0], [2, 0.5, 30, 0.8], [3, 0.6, -10, 1.0]].forEach(([i, speed, off, a]) => {
+      const f = document.getElementById('fog' + i);
+      f.style.left = `${-20 + off + Math.sin(t * speed + i) * 50}px`;
+      f.style.opacity = a * easeOut(prog(t, 0.3, 2.0));
+    });
+
+    BATS.forEach(b => {
+      const local = t - b.start;
+      if (local < 0) { b.el.style.opacity = 0; return; }
+      const p = (local % (b.dur + 1.5)) / b.dur;
+      if (p > 1) { b.el.style.opacity = 0; return; }
+      const x = 615 + b.dx * p + Math.sin(p * 9 + b.start) * b.wob;
+      const y = 1150 - 1260 * easeInOut(p * 0.9 + 0.05);
+      const s = b.scale * (0.5 + 0.9 * p);
+      const flap = 0.35 + 0.65 * Math.abs(Math.sin(t * b.flap));
+      b.el.setAttribute('transform', `translate(${x},${y}) scale(${s},${s * flap})`);
+      b.el.style.opacity = 0.75 * clamp(p * 6) * clamp((1 - p) * 6);
+    });
+
+    // Spider drops in on its thread, then sways.
+    const pd = elastic(prog(t, 1.5, 3.0));
+    const len = -30 + 320 * pd;
+    document.getElementById('thread').setAttribute('y2', len);
+    document.getElementById('spiderBody').setAttribute('transform', `translate(0, ${len + 8})`);
+    const sway = Math.sin(t * 1.7) * 2.2 * prog(t, 2.6, 3.4);
+    document.getElementById('spiderSwing').setAttribute('transform', `translate(670, 0) rotate(${sway})`);
+
+    document.querySelectorAll('.line > span').forEach((s, i) => {
+      const p = easeOut(prog(t, 1.1 + i * 0.2, 1.6 + i * 0.2));
+      s.style.transform = `translateY(${(1 - p) * s.parentElement.offsetHeight}px)`;
+    });
+
+    document.querySelectorAll('#headline [data-color]').forEach((w, i) => {
+      const target = RGB[w.dataset.color];
+      const p = easeInOut(prog(t, 2.0 + i * 0.12, 2.45 + i * 0.12));
+      w.style.color = `rgb(${mix(RGB.teal, target, p).join(',')})`;
+      if (w.dataset.fx === 'flicker') {
+        const lit = p < 1 ? p : flicker(t);
+        w.style.opacity = 0.35 + 0.65 * lit;
+        w.style.textShadow = `0 0 ${18 * lit}px rgba(242,128,46,${0.55 * lit})`;
+      }
+    });
+
+    document.querySelectorAll('#sub .s').forEach((s, i, all) => {
+      const step = all.length > 1 ? 0.35 : 0;
+      const ps = easeOut(prog(t, 2.55 + i * step, 3.05 + i * step));
+      s.style.opacity = ps; s.style.transform = `translateY(${(1 - ps) * 12}px)`;
+    });
+
+    document.querySelectorAll('.row').forEach((r, i) => {
+      const pr = easeOut(prog(t, 2.6 + i * 0.22, 3.1 + i * 0.22));
+      r.style.opacity = pr; r.style.transform = `translateX(${(1 - pr) * -16}px)`;
+    });
+
+    const bStart = Array.isArray(S.sub) ? 3.5 : 3.25;
+    const pb = easeInOut(prog(t, bStart, bStart + 0.65));
+    const rect = document.getElementById('btnrect');
+    rect.style.strokeDasharray = btnLen; rect.style.strokeDashoffset = btnLen * (1 - pb);
+    document.getElementById('icon').style.opacity = easeOut(prog(t, bStart + 0.35, bStart + 0.7));
+    const pt = easeOut(prog(t, bStart + 0.5, bStart + 0.85));
+    const label = document.getElementById('btnlabel');
+    label.style.opacity = pt; label.style.transform = `translateX(${(1 - pt) * -10}px)`;
+
+    const pv = easeOut(prog(t, bStart + 0.8, bStart + 1.3));
+    const visit = document.getElementById('visit');
+    visit.style.opacity = pv; visit.style.transform = `translateY(${(1 - pv) * 10}px)`;
+
+    document.getElementById('tag').style.opacity = 0.85 * easeOut(prog(t, bStart + 1.1, bStart + 1.6));
+  };
+
+  window.render(params.has('t') ? +params.get('t') : 9);
+</script>
+</body>
+</html>
