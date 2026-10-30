@@ -247,6 +247,16 @@
       frame: true, btnTop: 920, noTag: true,
       button: { icon: 'crown', html: 'FINAL ROUND \u2022 <b>CAST YOUR VOTE</b>' },
     },
+    winner: {
+      kicker: 'COSTUME CONTEST',
+      lines: [
+        [['And the crown', 'white']],
+        [['goes to\u2026', 'orange', 'flicker']],
+      ],
+      frame: true, btnTop: 920, noTag: true,
+      button: { icon: 'crown', html: 'BEST DRESSED \u2022 <b>HALLOWEEN EDITION</b>' },
+      visit: 'Thank you to everyone who dressed up and <b>voted</b>',
+    },
   };
 
   const params = new URLSearchParams(location.search);
@@ -285,7 +295,10 @@
     rows.appendChild(row);
   });
   if (!S.rows) rows.style.display = 'none';
-  if (S.btnTop) document.getElementById('btn').style.top = `${S.btnTop}px`;
+  if (S.btnTop) {
+    document.getElementById('btn').style.top = `${S.btnTop}px`;
+    document.getElementById('visit').style.top = `${S.btnTop + 107}px`;
+  }
   if (S.noTag) document.getElementById('tag').style.display = 'none';
 
   // Frame sits between the headline and the button; drawn once fonts settle the headline height.

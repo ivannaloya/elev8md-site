@@ -1,6 +1,6 @@
 # Story 2: Trusted Partner (animated)
 
-Source for `social/stories/Story_2_-_Trusted_Partner_animated.mov` (720x1280, 30fps, 9s).
+Source for `social/stories/videos/1_Trusted_Partner/Story_2_-_Trusted_Partner_animated.mov` (720x1280, 30fps, 9s).
 
 Edit the copy in the `COPY` object in `story.html`, then render:
 

@@ -1,7 +1,7 @@
 # Unwind Thursday: Halloween Edition stories
 
-Source for the four `social/stories/Halloween_*.mov` stories (720x1280, 30fps, 10s).
-All four come from `story.html`; pick one with `?story=`:
+Source for the Halloween stories in `social/stories/videos/` (promo stories are 720x1280; the end card and
+costume contest stories are 1080x1920). All of them come from `story.html`; pick one with `?story=`:
 
 | story | file |
 |---|---|
@@ -14,6 +14,7 @@ All four come from `story.html`; pick one with `?story=`:
 | `round1` | Costume_Contest_2_-_Round_1_Poll.mov |
 | `round2` | Costume_Contest_3_-_Round_2_Poll.mov |
 | `final` | Costume_Contest_4_-_Final_Round_Poll.mov |
+| `winner` | Costume_Contest_5_-_Winner_Announcement.mov |
 
 The costume contest stories and the end card render at 1080x1920 with `SCALE=1.5`. Poll stories leave framed space for photos and blank space under the button for the poll sticker.
 
