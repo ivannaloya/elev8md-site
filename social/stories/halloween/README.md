@@ -15,6 +15,8 @@ costume contest stories are 1080x1920). All of them come from `story.html`; pick
 | `round2` | Costume_Contest_3_-_Round_2_Poll.mov |
 | `final` | Costume_Contest_4_-_Final_Round_Poll.mov |
 | `winner` | Costume_Contest_5_-_Winner_Announcement.mov |
+| `happy` | Happy_Halloween.mov |
+| `contestant`, `lineup` | costume photo statics; pass photos in the URL (`photo=` or `photos=`), not committed |
 
 The costume contest stories and the end card render at 1080x1920 with `SCALE=1.5`. Poll stories leave framed space for photos and blank space under the button for the poll sticker.
 

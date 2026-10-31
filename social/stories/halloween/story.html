@@ -36,7 +36,8 @@
 
   #flow { position: absolute; left: 67px; top: 301px; width: 586px; }
   #headline { font-family: 'Anton'; font-size: 70px; line-height: 71px; color: var(--teal); text-transform: uppercase; }
-  .line { display: block; overflow: hidden; height: 71px; white-space: nowrap; }
+  /* clip (not hidden) with a margin so the orange glow isn't cut into a hard box */
+  .line { display: block; overflow: clip; overflow-clip-margin: 20px; height: 71px; white-space: nowrap; }
   .line > span { display: inline-block; }
 
   #sub { margin-top: 74px; width: 520px; font-family: 'Inter'; font-style: italic; font-weight: 300;
@@ -258,6 +259,15 @@
       frame: true, btnTop: 920, noTag: true,
       button: { icon: 'crown', html: 'FINAL ROUND \u2022 <b>CAST YOUR VOTE</b>' },
     },
+    happy: {
+      kicker: 'FROM ALL OF US',
+      lines: [
+        [['Happy', 'white', null, 1.75]],
+        [['Halloween!', 'orange', 'flicker', 1.75]],
+      ],
+      sub: 'Wishing you a night full of treats, good company and zero scares. From all of us at Friends of Medicine.',
+      button: { icon: 'moon', html: 'TRICK OR TREAT \u2022 <b>OCTOBER 31</b>' },
+    },
     // One costume per story: ?story=contestant&num=1&photo=path/to.jpg
     contestant: {
       kicker: 'COSTUME CONTEST',
@@ -476,7 +486,7 @@
 
     document.querySelectorAll('.line > span').forEach((s, i) => {
       const p = easeOut(prog(t, 1.1 + i * 0.2, 1.6 + i * 0.2));
-      s.style.transform = `translateY(${(1 - p) * s.parentElement.offsetHeight}px)`;
+      s.style.transform = `translateY(${(1 - p) * (s.parentElement.offsetHeight + 20)}px)`;
     });
 
     document.querySelectorAll('#headline [data-color]').forEach((w, i) => {
