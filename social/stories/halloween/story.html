@@ -279,8 +279,16 @@
     lineup: {
       kicker: 'COSTUME CONTEST',
       lines: [[['Who wore it', 'white'], [' best?', 'orange', 'flicker']]],
-      btnTop: 1072, noTag: true,
-      button: { icon: 'arrow', html: 'WHO WINS? \u2022 <b>VOTE BELOW</b>' },
+      btnAfterGrid: true, noTag: true,
+      button: { icon: 'crown', html: 'TAP THROUGH \u2022 <b>VOTE IN OUR POLLS</b>' },
+    },
+    // Instagram polls hold four options, so a bigger field is split across poll stories:
+    // ?story=poll&part=1&of=2&start=1&photos=a.jpg,b.jpg,c.jpg
+    poll: {
+      kicker: 'COSTUME CONTEST',
+      lines: [[['Who wore it', 'white'], [' best?', 'orange', 'flicker']]],
+      btnAfterGrid: true, noTag: true,
+      button: { icon: 'arrow', html: 'POLL # \u2022 <b>VOTE BELOW</b>' },
     },
     winner: {
       kicker: 'COSTUME CONTEST',
@@ -297,6 +305,9 @@
   const params = new URLSearchParams(location.search);
   const S = STORIES[params.get('story') || 'afraid'];
   const NUM = params.get('num') || '1';
+  if (S === STORIES.poll) {
+    S.button = { ...S.button, html: S.button.html.replace('#', `${params.get('part') || 1} OF ${params.get('of') || 2}`) };
+  }
   if (S === STORIES.contestant) {
     S.lines = [[['Costume', 'white'], [` No. ${NUM}`, 'orange', 'flicker']]];
     S.button = { ...S.button, html: S.button.html.replace('#', NUM) };
@@ -344,30 +355,48 @@
   // Frame sits between the headline and the button; drawn once fonts settle the headline height.
   const frameSvg = document.getElementById('frame');
   let frameCorners = [];
-  // Photo slots: one large portrait with an outlined number, or a 3 + 2 grid with number badges.
+  // Photo slots: one large photo with an outlined number, or rows of photos with number badges.
+  // Each box takes its photo's own shape, so photos are only resized, never cropped.
   const photoBox = document.getElementById('photos');
-  const addPhoto = (src, x, y, w, h, badge) => {
+  const slots = [];
+  const addPhoto = (src, badge) => {
     const d = document.createElement('div'); d.className = 'photo';
-    Object.assign(d.style, { left: `${x}px`, top: `${y}px`, width: `${w}px`, height: `${h}px` });
     d.innerHTML = `<img src="${src}" alt="">` + (badge ? `<span class="badge">${badge}</span>` : '');
     photoBox.appendChild(d);
+    slots.push({ el: d, img: d.querySelector('img') });
   };
-  if (params.get('photo')) {
-    addPhoto(params.get('photo'), 67, 398, 450, 600);
-    const big = document.getElementById('bignum');
-    big.textContent = NUM.padStart(2, '0');
-    Object.assign(big.style, { display: 'block', left: '532px', top: '842px', fontSize: '160px' });
-  }
-  if (params.get('photos')) {
-    const srcs = params.get('photos').split(',');
-    const cols = srcs.length === 4 ? 2 : 3;
-    const [w, h] = cols === 2 ? [240, 320] : [186, 248];
-    const gap = 14, top = cols === 2 ? 398 : 477;
-    srcs.forEach((src, i) => {
-      const row = Math.floor(i / cols), inRow = Math.min(cols, srcs.length - row * cols);
-      const left = 67 + (586 - (inRow * w + (inRow - 1) * gap)) / 2;
-      addPhoto(src, left + (i % cols) * (w + gap), top + row * (h + gap), w, h, `NO. ${i + 1}`);
+  const place = (slot, x, y, w, h) => Object.assign(slot.el.style, { left: `${x}px`, top: `${y}px`, width: `${w}px`, height: `${h}px` });
+  const aspect = slot => (slot.img.naturalWidth && slot.img.naturalHeight) ? slot.img.naturalWidth / slot.img.naturalHeight : 0.75;
+
+  const single = params.get('photo');
+  if (single) addPhoto(single);
+  const many = params.get('photos') ? params.get('photos').split(',') : [];
+  const start = +(params.get('start') || 1);
+  many.forEach((src, i) => addPhoto(src, `NO. ${start + i}`));
+
+  function layoutPhotos() {
+    if (single) {
+      const h = 600, w = Math.round(h * aspect(slots[0]));
+      place(slots[0], 67, 398, w, h);
+      const big = document.getElementById('bignum');
+      big.textContent = NUM.padStart(2, '0');
+      Object.assign(big.style, { display: 'block', left: `${67 + w + 15}px`, top: '842px', fontSize: '160px' });
+    }
+    if (!many.length) return;
+    // Rows of up to `cols` photos share one height: the tallest that lets every row fit the 586px column.
+    const cols = +(params.get('cols') || 3), gap = 14, top = 398, maxH = +(params.get('maxh') || 420);
+    const rows = [];
+    for (let i = 0; i < slots.length; i += cols) rows.push(slots.slice(i, i + cols));
+    const h = Math.floor(Math.min(maxH, ...rows.map(r => (586 - gap * (r.length - 1)) / r.reduce((a, sl) => a + aspect(sl), 0))));
+    rows.forEach((r, ri) => {
+      const widths = r.map(sl => Math.round(h * aspect(sl)));
+      let x = 67 + (586 - (widths.reduce((a, b) => a + b, 0) + gap * (r.length - 1))) / 2;
+      r.forEach((sl, k) => { place(sl, x, top + ri * (h + gap), widths[k], h); x += widths[k] + gap; });
     });
+    if (S.btnAfterGrid) {
+      const bottom = top + rows.length * h + (rows.length - 1) * gap;
+      document.getElementById('btn').style.top = `${bottom + 30}px`;
+    }
   }
 
   function layoutFrame() {
@@ -512,6 +541,7 @@
     });
 
     layoutFrame();
+    layoutPhotos();
     document.querySelectorAll('.photo').forEach((ph, i) => {
       const pp = easeOut(prog(t, 2.2 + i * 0.12, 2.8 + i * 0.12));
       ph.style.opacity = pp; ph.style.transform = `translateY(${(1 - pp) * 24}px) scale(${0.96 + 0.04 * pp})`;

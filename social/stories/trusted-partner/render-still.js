@@ -7,7 +7,7 @@ const path = require('path');
   const p = await b.newPage({ viewport: { width: 720, height: 1280 }, deviceScaleFactor: +(process.env.SCALE || 1) });
   const [f, q] = html.split('?');
   await p.goto('file://' + path.resolve(f) + (q ? '?' + q : ''));
-  await p.evaluate(() => document.fonts.ready);
+  await p.evaluate(() => Promise.all([document.fonts.ready, ...[...document.images].map(i => i.decode().catch(() => {}))]));
   await p.evaluate(t => window.render(t), +t);
   await p.locator('#stage').screenshot({ path: out });
   await b.close();
