@@ -359,6 +359,7 @@
   const RGB = { teal: [61, 139, 145], white: [255, 255, 255], orange: [242, 128, 46] };
   // Deterministic flicker: mostly lit, with brief dips like a failing bulb.
   const flicker = t => {
+    if (params.has('still')) return 1;
     const n = Math.sin(t * 37.1) * Math.sin(t * 11.3 + 1.7) * Math.sin(t * 5.9 + 0.4);
     return n > 0.42 ? 0.35 : 1;
   };

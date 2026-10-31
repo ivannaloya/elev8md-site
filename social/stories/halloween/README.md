@@ -26,3 +26,9 @@ ffmpeg -framerate 30 -i frames/f%04d.png -c:v libx264 -pix_fmt yuv420p -crf 14 -
 ```
 
 Open `story.html?story=invite&t=2.5` in a browser to preview any moment.
+
+Static PNGs of the costume contest stories live in `social/stories/statics/`. Add `&still=1` to keep the flicker lit:
+
+```sh
+SCALE=1.5 node ../trusted-partner/render-still.js "story.html?story=round1&still=1" Costume_Contest_2_-_Round_1_Poll.png 9.3
+```
