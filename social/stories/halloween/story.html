@@ -262,18 +262,15 @@
     contestant: {
       kicker: 'COSTUME CONTEST',
       lines: [[['Costume', 'white'], [' No. #', 'orange', 'flicker']]],
-      btnTop: 955, noTag: true,
+      btnTop: 1022, noTag: true,
       button: { icon: 'arrow', html: 'COSTUME # \u2022 <b>CAST YOUR VOTE</b>' },
     },
     // All costumes in one grid: ?story=lineup&photos=a.jpg,b.jpg,...
     lineup: {
       kicker: 'COSTUME CONTEST',
-      lines: [
-        [['Who wore', 'white']],
-        [['it best?', 'orange', 'flicker']],
-      ],
-      btnTop: 1012, noTag: true,
-      button: { icon: 'crown', html: 'TAP THROUGH \u2022 <b>VOTE FOR YOUR FAVORITE</b>' },
+      lines: [[['Who wore it', 'white'], [' best?', 'orange', 'flicker']]],
+      btnTop: 1072, noTag: true,
+      button: { icon: 'arrow', html: 'WHO WINS? \u2022 <b>VOTE BELOW</b>' },
     },
     winner: {
       kicker: 'COSTUME CONTEST',
@@ -346,18 +343,20 @@
     photoBox.appendChild(d);
   };
   if (params.get('photo')) {
-    addPhoto(params.get('photo'), 67, 400, 390, 520);
+    addPhoto(params.get('photo'), 67, 398, 450, 600);
     const big = document.getElementById('bignum');
     big.textContent = NUM.padStart(2, '0');
-    Object.assign(big.style, { display: 'block', left: '478px', top: '742px' });
+    Object.assign(big.style, { display: 'block', left: '532px', top: '842px', fontSize: '160px' });
   }
   if (params.get('photos')) {
     const srcs = params.get('photos').split(',');
-    const w = 186, h = 248, gap = 14, top = 477;
+    const cols = srcs.length === 4 ? 2 : 3;
+    const [w, h] = cols === 2 ? [240, 320] : [186, 248];
+    const gap = 14, top = cols === 2 ? 398 : 477;
     srcs.forEach((src, i) => {
-      const row = Math.floor(i / 3), inRow = Math.min(3, srcs.length - row * 3);
+      const row = Math.floor(i / cols), inRow = Math.min(cols, srcs.length - row * cols);
       const left = 67 + (586 - (inRow * w + (inRow - 1) * gap)) / 2;
-      addPhoto(src, left + (i % 3) * (w + gap), top + row * (h + gap), w, h, `NO. ${i + 1}`);
+      addPhoto(src, left + (i % cols) * (w + gap), top + row * (h + gap), w, h, `NO. ${i + 1}`);
     });
   }
 
