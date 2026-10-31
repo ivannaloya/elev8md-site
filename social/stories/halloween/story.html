@@ -73,6 +73,16 @@
   .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .badge { position: absolute; left: 10px; bottom: 10px; font-family: 'Anton'; font-size: 26px; line-height: 38px;
            color: #000; background: var(--orange); border-radius: 10px; padding: 0 12px; letter-spacing: 0.04em; }
+  /* Final poll story: numbered costume list per poll, with empty room under each for its poll sticker. */
+  #ballot { position: absolute; left: 67px; top: 404px; width: 586px; display: none; }
+  .bsec { margin-bottom: 26px; }
+  .bhead { display: flex; align-items: center; gap: 10px; font-family: 'Anton'; font-size: 24px; letter-spacing: 0.16em;
+           color: var(--teal); padding-bottom: 8px; border-bottom: 1px solid rgba(61,139,145,0.45); }
+  .brow { display: flex; align-items: center; height: 46px; border-bottom: 1px solid rgba(61,139,145,0.25); }
+  .brow .badge { position: static; font-size: 20px; line-height: 30px; padding: 0 10px; margin-right: 16px; }
+  .brow span:last-child { font-family: 'Anton'; font-size: 28px; letter-spacing: 0.06em; color: #fff; padding-top: 2px; }
+  .bspace { height: 176px; }
+
   #bignum { position: absolute; font-family: 'Anton'; font-size: 190px; line-height: 1; color: transparent;
             -webkit-text-stroke: 2px var(--orange); display: none; }
 
@@ -130,6 +140,7 @@
   <svg id="frame"></svg>
   <div id="photos"></div>
   <div id="bignum"></div>
+  <div id="ballot"></div>
 
   <div id="btn">
     <svg id="btnsvg"><rect id="btnrect" rx="39.5" ry="39.5" fill="none" stroke="#3d8b91" stroke-width="2"/></svg>
@@ -267,6 +278,15 @@
       ],
       sub: 'Have fun tonight and be safe out there. Watch for little trick or treaters and plan a safe ride home.',
       button: { icon: 'moon', html: 'BE SAFE \u2022 <b>HAVE FUN</b>' },
+    },
+    ballot: {
+      kicker: 'COSTUME CONTEST',
+      lines: [[['Who wore it', 'white'], [' best?', 'orange', 'flicker']]],
+      noTag: true, noButton: true,
+      polls: [
+        ['80s Aerobics', 'La Catrina', 'The Joker'],
+        ['Cafecito', 'Red Riding Hood', 'Black Cat'],
+      ],
     },
     // One costume per story: ?story=contestant&num=1&photo=path/to.jpg
     contestant: {
@@ -411,8 +431,20 @@
     frameCorners = [...frameSvg.querySelectorAll('path')];
   }
 
-  document.getElementById('icon').innerHTML = ICONS[S.button.icon];
-  document.getElementById('btnlabel').innerHTML = S.button.html;
+  if (S.polls) {
+    const ballot = document.getElementById('ballot');
+    ballot.style.display = 'block';
+    let n = 1;
+    ballot.innerHTML = S.polls.map((names, pi) => `<div class="bsec">
+      <div class="bhead"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3d8b91" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS.arrow}</svg>POLL ${pi + 1} OF ${S.polls.length} \u2022 VOTE BELOW</div>
+      ${names.map(nm => `<div class="brow"><span class="badge">NO. ${n++}</span><span>${nm.toUpperCase().replace('80S', '80s')}</span></div>`).join('')}
+      <div class="bspace"></div></div>`).join('');
+  }
+  if (S.noButton) document.getElementById('btn').style.display = 'none';
+  else {
+    document.getElementById('icon').innerHTML = ICONS[S.button.icon];
+    document.getElementById('btnlabel').innerHTML = S.button.html;
+  }
   document.getElementById('visit').innerHTML = S.visit || '';
 
   // Bats fly up out of the moon on staggered loops.
@@ -547,6 +579,10 @@
       ph.style.opacity = pp; ph.style.transform = `translateY(${(1 - pp) * 24}px) scale(${0.96 + 0.04 * pp})`;
     });
     document.getElementById('bignum').style.opacity = easeOut(prog(t, 2.7, 3.2));
+    document.querySelectorAll('.bhead, .brow').forEach((r, i) => {
+      const pr = easeOut(prog(t, 2.4 + i * 0.12, 2.9 + i * 0.12));
+      r.style.opacity = pr; r.style.transform = `translateX(${(1 - pr) * -16}px)`;
+    });
     frameCorners.forEach((c, i) => {
       const p = easeInOut(prog(t, 2.3 + i * 0.1, 2.8 + i * 0.1));
       c.style.strokeDasharray = 2 * 46; c.style.strokeDashoffset = 2 * 46 * (1 - p);
