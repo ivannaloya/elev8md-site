@@ -82,6 +82,19 @@
   .brow .badge { position: static; font-size: 20px; line-height: 30px; padding: 0 10px; margin-right: 16px; }
   .brow span:last-child { font-family: 'Anton'; font-size: 28px; letter-spacing: 0.06em; color: #fff; padding-top: 2px; }
   .bspace { height: 176px; }
+  /* Two column version: polls side by side, prize above, one shared empty area below for both poll stickers. */
+  #ballot.cols .bcols { display: grid; grid-template-columns: 1fr 1fr; column-gap: 30px; }
+  #ballot.cols .bsec { margin-bottom: 0; }
+  #ballot.cols .bhead { font-size: 20px; letter-spacing: 0.1em; }
+  #ballot.cols .brow { height: 44px; }
+  #ballot.cols .brow .badge { font-size: 17px; line-height: 26px; padding: 0 8px; margin-right: 10px; }
+  #ballot.cols .brow span:last-child { font-size: 23px; letter-spacing: 0.05em; white-space: nowrap; }
+  #ballot.cols .bspace { display: none; }
+  .prize { border: 1.5px solid rgba(242,128,46,0.7); border-radius: 16px; padding: 14px 20px 16px; margin-bottom: 30px;
+          background: rgba(242,128,46,0.06); box-shadow: 0 0 30px rgba(242,128,46,0.12); }
+  .prize .plabel { display: flex; align-items: center; gap: 10px; font-family: 'Anton'; font-size: 22px;
+                   letter-spacing: 0.16em; color: var(--orange); }
+  .prize .ptext { margin-top: 6px; font-family: 'Inter'; font-weight: 400; font-size: 21px; line-height: 29px; color: #fff; }
 
   #bignum { position: absolute; font-family: 'Anton'; font-size: 190px; line-height: 1; color: transparent;
             -webkit-text-stroke: 2px var(--orange); display: none; }
@@ -163,6 +176,7 @@
     ticket: '<path d="M3 8.5v-2A1.5 1.5 0 0 1 4.5 5h15A1.5 1.5 0 0 1 21 6.5v2a2.5 2.5 0 0 0 0 5v2a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 15.5v-2a2.5 2.5 0 0 0 0-5z"/><path d="M15 6v2M15 11v2M15 16v1"/>',
     arrow: '<path d="M12 4v15M6 13l6 6 6-6"/>',
     moon: '<path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/>',
+    trophy: '<path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8.5 20h7M10 17h4"/>',
     crown: '<path d="M3.5 8.5l4.5 3.8L12 5.5l4 6.8 4.5-3.8-1.8 10H5.3z"/>',
     bell: '<path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 1.5h-15z"/><path d="M10 20.5a2.2 2.2 0 0 0 4 0"/>',
   };
@@ -278,6 +292,19 @@
       ],
       sub: 'Have fun tonight and be safe out there. Watch for little trick or treaters and plan a safe ride home.',
       button: { icon: 'moon', html: 'BE SAFE \u2022 <b>HAVE FUN</b>' },
+    },
+    // Final poll story, Instagram safe area version: everything sits inside the
+    // 250px top and bottom margins of a 1080x1920 story, with room below for two polls.
+    // Prize text comes from ?prize=... or the prize field.
+    ballot2: {
+      kicker: 'COSTUME CONTEST',
+      lines: [[['Who wore it', 'white'], [' best?', 'orange', 'flicker']]],
+      noTag: true, noButton: true, twoCol: true, shift: 34, moonTop: 1160,
+      prize: '',
+      polls: [
+        ['80s Aerobics', 'La Catrina', 'The Joker'],
+        ['Cafecito', 'Red Riding Hood', 'Black Cat'],
+      ],
     },
     ballot: {
       kicker: 'COSTUME CONTEST',
@@ -435,12 +462,23 @@
     const ballot = document.getElementById('ballot');
     ballot.style.display = 'block';
     let n = 1;
-    ballot.innerHTML = S.polls.map((names, pi) => `<div class="bsec">
-      <div class="bhead"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3d8b91" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS.arrow}</svg>POLL ${pi + 1} OF ${S.polls.length} \u2022 VOTE BELOW</div>
+    const sections = S.polls.map((names, pi) => `<div class="bsec">
+      <div class="bhead"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3d8b91" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS.arrow}</svg>POLL ${pi + 1} ${S.twoCol ? '' : `OF ${S.polls.length} `}\u2022 VOTE BELOW</div>
       ${names.map(nm => `<div class="brow"><span class="badge">NO. ${n++}</span><span>${nm.toUpperCase().replace('80S', '80s')}</span></div>`).join('')}
       <div class="bspace"></div></div>`).join('');
+    const prize = params.get('prize') || S.prize;
+    const prizeHtml = S.twoCol ? `<div class="prize"><div class="plabel"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f2802e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICONS.trophy}</svg>THE PRIZE</div><div class="ptext" id="ptext"></div></div>` : '';
+    if (S.twoCol) ballot.className = 'cols';
+    ballot.innerHTML = prizeHtml + (S.twoCol ? `<div class="bcols">${sections}</div>` : sections);
+    if (S.twoCol) document.getElementById('ptext').textContent = prize || 'PRIZE GOES HERE';
   }
   if (S.noButton) document.getElementById('btn').style.display = 'none';
+  if (S.shift) {
+    [['logo', 140], ['kicker', 166], ['rule', 261], ['flow', 301], ['ballot', 404]].forEach(([id, top]) => {
+      document.getElementById(id).style.top = `${top + S.shift}px`;
+    });
+  }
+  if (S.moonTop) document.getElementById('moon').style.top = `${S.moonTop}px`;
   else {
     document.getElementById('icon').innerHTML = ICONS[S.button.icon];
     document.getElementById('btnlabel').innerHTML = S.button.html;
@@ -534,7 +572,7 @@
       b.el.setAttribute('transform', `translate(${x},${y}) scale(${s},${s * flap})`);
       b.el.style.opacity = 0.75 * clamp(p * 6) * clamp((1 - p) * 6);
       // In stills, keep bats out of the content column so none freeze on top of text or photos.
-      if (params.has('still') && x < 680 && y > 270 && y < 1050) b.el.style.opacity = 0;
+      if (params.has('still') && x < 680 && y > 150 && y < 1120) b.el.style.opacity = 0;
     });
 
     // Spider drops in on its thread, then sways.
