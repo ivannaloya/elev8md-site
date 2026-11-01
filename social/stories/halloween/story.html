@@ -96,6 +96,10 @@
                    letter-spacing: 0.16em; color: var(--orange); }
   .prize .ptext { margin-top: 6px; font-family: 'Inter'; font-weight: 400; font-size: 21px; line-height: 29px; color: #fff; }
 
+  #crownmark { position: absolute; display: none; font-family: 'Anton'; font-size: 34px; letter-spacing: 0.14em; color: var(--orange);
+               text-shadow: 0 0 18px rgba(242,128,46,0.5); }
+  #prizebox { position: absolute; left: 67px; width: 586px; box-sizing: border-box; display: none; }
+
   #bignum { position: absolute; font-family: 'Anton'; font-size: 190px; line-height: 1; color: transparent;
             -webkit-text-stroke: 2px var(--orange); display: none; }
 
@@ -154,6 +158,8 @@
   <div id="photos"></div>
   <div id="bignum"></div>
   <div id="ballot"></div>
+  <div id="crownmark"><svg width="78" height="78" viewBox="0 0 24 24" fill="none" stroke="#f2802e" stroke-width="1.4" stroke-linejoin="round"><path d="M3.5 8.5l4.5 3.8L12 5.5l4 6.8 4.5-3.8-1.8 10H5.3z"/></svg><div>WINNER</div></div>
+  <div id="prizebox"></div>
 
   <div id="btn">
     <svg id="btnsvg"><rect id="btnrect" rx="39.5" ry="39.5" fill="none" stroke="#3d8b91" stroke-width="2"/></svg>
@@ -296,6 +302,18 @@
     // Final poll story, Instagram safe area version: everything sits inside the
     // 250px top and bottom margins of a 1080x1920 story, with room below for two polls.
     // Prize text comes from ?prize=... or the prize field.
+    // Winner reveal: ?story=champion&num=1&photo=path/to.jpg
+    champion: {
+      kicker: 'COSTUME CONTEST',
+      lines: [
+        [['Best dressed', 'white']],
+        [['80s AEROBICS!', 'orange', 'flicker raw']],
+      ],
+      noTag: true, noButton: true, shift: 34, moonTop: 1160,
+      photoTop: 505, photoH: 380, winnerMark: true,
+      prize: 'A day on the boat with the FOM inner circle for the winner plus one!', prizeTop: 905,
+      visit: 'Thank you to everyone who dressed up and <b>voted!</b>', visitTop: 1047,
+    },
     ballot2: {
       kicker: 'COSTUME CONTEST',
       lines: [[['Who wore it', 'white'], [' best?', 'orange', 'flicker']]],
@@ -371,6 +389,7 @@
     pieces.forEach(([text, color, fx]) => {
       const s = document.createElement('span'); s.textContent = text;
       s.dataset.color = color; if (fx) s.dataset.fx = fx;
+      if (fx && fx.includes('raw')) s.style.textTransform = 'none';
       inner.appendChild(s);
     });
     line.appendChild(inner); headline.appendChild(line);
@@ -423,11 +442,13 @@
 
   function layoutPhotos() {
     if (single) {
-      const h = 600, w = Math.round(h * aspect(slots[0]));
-      place(slots[0], 67, 398, w, h);
+      const top = S.photoTop || 398, h = S.photoH || 600, w = Math.round(h * aspect(slots[0]));
+      place(slots[0], 67, top, w, h);
       const big = document.getElementById('bignum');
       big.textContent = NUM.padStart(2, '0');
-      Object.assign(big.style, { display: 'block', left: `${67 + w + 15}px`, top: '842px', fontSize: '160px' });
+      const fs = S.photoH ? 150 : 160;
+      Object.assign(big.style, { display: 'block', left: `${67 + w + 15}px`, top: `${top + h - 156 * fs / 160}px`, fontSize: `${fs}px` });
+      if (S.winnerMark) Object.assign(document.getElementById('crownmark').style, { display: 'block', left: `${67 + w + 18}px`, top: `${top + 6}px` });
     }
     if (!many.length) return;
     // Rows of up to `cols` photos share one height: the tallest that lets every row fit the 586px column.
@@ -479,6 +500,13 @@
     });
   }
   if (S.moonTop) document.getElementById('moon').style.top = `${S.moonTop}px`;
+  if (S.visitTop) document.getElementById('visit').style.top = `${S.visitTop}px`;
+  if (S.prizeTop) {
+    const pb = document.getElementById('prizebox');
+    Object.assign(pb.style, { display: 'block', top: `${S.prizeTop}px` });
+    pb.innerHTML = `<div class="prize" style="margin:0"><div class="plabel"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f2802e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICONS.trophy}</svg>THE PRIZE</div><div class="ptext"></div></div>`;
+    pb.querySelector('.ptext').textContent = S.prize;
+  }
   else {
     document.getElementById('icon').innerHTML = ICONS[S.button.icon];
     document.getElementById('btnlabel').innerHTML = S.button.html;
@@ -592,7 +620,7 @@
       const target = RGB[w.dataset.color];
       const p = easeInOut(prog(t, 2.0 + i * 0.12, 2.45 + i * 0.12));
       w.style.color = `rgb(${mix(RGB.teal, target, p).join(',')})`;
-      if (w.dataset.fx === 'flicker') {
+      if ((w.dataset.fx || '').includes('flicker')) {
         const lit = p < 1 ? p : flicker(t);
         w.style.opacity = 0.35 + 0.65 * lit;
         w.style.textShadow = `0 0 ${18 * lit}px rgba(242,128,46,${0.55 * lit})`;
@@ -617,6 +645,10 @@
       ph.style.opacity = pp; ph.style.transform = `translateY(${(1 - pp) * 24}px) scale(${0.96 + 0.04 * pp})`;
     });
     document.getElementById('bignum').style.opacity = easeOut(prog(t, 2.7, 3.2));
+    document.getElementById('crownmark').style.opacity = easeOut(prog(t, 2.9, 3.4));
+    const ppz = easeOut(prog(t, 3.2, 3.7));
+    document.getElementById('prizebox').style.opacity = ppz;
+    document.getElementById('prizebox').style.transform = `translateY(${(1 - ppz) * 14}px)`;
     document.querySelectorAll('.bhead, .brow').forEach((r, i) => {
       const pr = easeOut(prog(t, 2.4 + i * 0.12, 2.9 + i * 0.12));
       r.style.opacity = pr; r.style.transform = `translateX(${(1 - pr) * -16}px)`;
