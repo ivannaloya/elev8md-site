@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: 'Anton'; src: url(../trusted-partner/fonts/anton.woff2) format('woff2'); }
+  @font-face { font-family: 'Inter'; font-style: normal; font-weight: 100 900; src: url(../trusted-partner/fonts/inter.woff2) format('woff2'); }
+
+  :root { --teal: #3d8b91; --frame: rgb(92, 172, 177); }
+  html, body { margin: 0; padding: 0; background: #000; }
+  #stage { position: relative; width: 720px; height: 1280px; overflow: hidden; background: #000; }
+
+  /* The source flyer, scaled so its framed window lands in our window, faded to black top and bottom. */
+  /* Scale 0.599 maps the flyer's frame (267,462 to 811,1330) exactly onto #border below. */
+  #scene { position: absolute; left: 37.1px; top: 19.3px; width: 646.9px; height: 1150.1px;
+           -webkit-mask-image: linear-gradient(to bottom, transparent 19%, #000 24%, #000 70%, transparent 74%),
+                               linear-gradient(to right, transparent 0%, #000 14%, #000 86%, transparent 100%);
+           -webkit-mask-composite: source-in;
+                   mask-image: linear-gradient(to bottom, transparent 19%, #000 24%, #000 70%, transparent 74%),
+                               linear-gradient(to right, transparent 0%, #000 14%, #000 86%, transparent 100%);
+                   mask-composite: intersect; }
+  #scene img { width: 100%; height: 100%; display: block; }
+
+  /* Darkens everything outside the window, so the yacht reads bright against near black. */
+  #window { position: absolute; left: 203px; top: 302px; width: 314px; height: 508px; overflow: hidden;
+            box-shadow: 0 0 0 1600px rgba(0,0,0,0.64), 0 0 60px 10px rgba(61,139,145,0.25); }
+  #border { position: absolute; left: 197px; top: 296px; overflow: visible; }
+  #border rect { fill: none; stroke: var(--frame); stroke-width: 7; }
+  #sweep { position: absolute; top: -20%; left: 0; width: 90px; height: 140%; transform: rotate(18deg);
+           background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.22), rgba(255,255,255,0)); }
+
+  #logo { position: absolute; left: 308px; top: 170px; width: 104px; height: 104px; }
+
+  #text { position: absolute; left: 0; right: 0; top: 846px; text-align: center; }
+  #kicker { font-family: 'Inter'; font-weight: 400; font-size: 17px; letter-spacing: 0.32em; color: var(--frame); }
+  #headline { margin-top: 10px; overflow: clip; overflow-clip-margin: 16px; height: 74px; }
+  #headline span { display: inline-block; font-family: 'Anton'; font-size: 64px; line-height: 74px; color: #fff; }
+  #headline em { font-style: normal; color: var(--frame); }
+  #line { margin-top: 18px; font-family: 'Anton'; font-size: 25px; letter-spacing: 0.12em; color: #fff; }
+  #line em { font-style: normal; color: var(--frame); }
+  #rule { width: 200px; height: 2px; margin: 18px auto 0; background: var(--frame); }
+  #food { margin-top: 18px; font-family: 'Inter'; font-weight: 400; font-size: 16px; letter-spacing: 0.3em; color: rgba(255,255,255,0.88); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="scene"><img id="bg" alt=""></div>
+  <div id="window"><div id="sweep"></div></div>
+  <svg id="border" width="326" height="520"><rect x="3.5" y="3.5" width="319" height="513"/></svg>
+  <img id="logo" alt="">
+
+  <div id="text">
+    <div id="kicker">COSTUME CONTEST PRIZE</div>
+    <div id="headline"><span>A DAY ON <em>THE WATER</em></span></div>
+    <div id="line">YOU <em>+ 1</em> &nbsp;&bull;&nbsp; FOM MIAMI INNER CIRCLE</div>
+    <div id="rule"></div>
+    <div id="food">FOOD AND DRINKS INCLUDED</div>
+  </div>
+</div>
+
+<script>
+  // Images come in the URL so the source flyer stays out of the repo: ?bg=flyer.png&logo=logo.png
+  const params = new URLSearchParams(location.search);
+  document.getElementById('bg').src = params.get('bg') || '';
+  document.getElementById('logo').src = params.get('logo') || '../trusted-partner/logo.png';
+
+  const clamp = v => Math.max(0, Math.min(1, v));
+  const prog = (t, a, b) => clamp((t - a) / (b - a));
+  const easeOut = p => 1 - Math.pow(1 - p, 3);
+  const easeInOut = p => p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+
+  const rect = document.querySelector('#border rect');
+  const perim = 2 * (319 + 513);
+  rect.style.strokeDasharray = perim;
+
+  window.render = function (t) {
+    const pl = easeOut(prog(t, 0.2, 0.8));
+    const logo = document.getElementById('logo');
+    logo.style.opacity = pl; logo.style.transform = `scale(${0.85 + 0.15 * pl})`;
+
+    // The scene stays locked to the frame; it fades up, then a soft light sweeps across the water.
+    document.getElementById('scene').style.opacity = easeOut(prog(t, 0.4, 2.0));
+    const pw = easeInOut(prog(t, 2.3, 3.6));
+    const sweep = document.getElementById('sweep');
+    sweep.style.left = `${-140 + pw * 520}px`;
+    sweep.style.opacity = pw > 0 && pw < 1 ? 1 : 0;
+
+    rect.style.strokeDashoffset = perim * (1 - easeInOut(prog(t, 1.0, 2.2)));
+
+    const pk = easeInOut(prog(t, 2.2, 2.8));
+    document.getElementById('kicker').style.clipPath = `inset(0 ${50 - pk * 50}% 0 ${50 - pk * 50}%)`;
+
+    const ph = easeOut(prog(t, 2.6, 3.2));
+    document.querySelector('#headline span').style.transform = `translateY(${(1 - ph) * 90}px)`;
+
+    const pi = easeOut(prog(t, 3.2, 3.7));
+    const line = document.getElementById('line');
+    line.style.opacity = pi; line.style.transform = `translateY(${(1 - pi) * 12}px)`;
+
+    document.getElementById('rule').style.transform = `scaleX(${easeInOut(prog(t, 3.6, 4.1))})`;
+
+    const pf = easeOut(prog(t, 4.0, 4.5));
+    const food = document.getElementById('food');
+    food.style.opacity = pf; food.style.transform = `translateY(${(1 - pf) * 10}px)`;
+  };
+
+  window.render(params.has('t') ? +params.get('t') : 9);
+</script>
+</body>
+</html>
