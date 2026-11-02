@@ -307,6 +307,28 @@
     // Final poll story, Instagram safe area version: everything sits inside the
     // 250px top and bottom margins of a 1080x1920 story, with room below for two polls.
     // Prize text comes from ?prize=... or the prize field.
+    // Winner sequence intro, made to sit under a drumroll.
+    suspense: {
+      kicker: 'COSTUME CONTEST',
+      lines: [
+        [['And the winner of', 'white']],
+        [['our costume contest', 'white']],
+        [['from last', 'white']],
+        [['Unwind Thursday', 'teal']],
+        [['is\u2026', 'orange', 'flicker', 1.6]],
+      ],
+      noTag: true, shift: 34, moonTop: 1160, btnTop: 790,
+      button: { icon: 'crown', html: 'DRUMROLL <b>PLEASE\u2026</b>' },
+    },
+    // One story per winner when there is a tie: ?story=cowinner&num=1&part=1&of=2&name=80s AEROBICS!&photo=a.jpg
+    cowinner: {
+      kicker: 'COSTUME CONTEST',
+      lines: [],
+      noTag: true, shift: 34, moonTop: 1160,
+      photoTop: 505, photoH: 380, winnerMark: true, btnTop: 905,
+      button: { icon: 'crown', html: 'IT\u2019S A TIE \u2022 <b>WINNER #</b>' },
+      visit: 'Stay tuned to see what our winners <b>take home</b>', visitTop: 1012,
+    },
     // Winner reveal: ?story=champion&num=1&photo=path/to.jpg
     champion: {
       kicker: 'COSTUME CONTEST',
@@ -399,6 +421,10 @@
   const params = new URLSearchParams(location.search);
   const S = STORIES[params.get('story') || 'afraid'];
   const NUM = params.get('num') || '1';
+  if (S === STORIES.cowinner) {
+    S.lines = [[['Best dressed', 'white']], [[params.get('name') || 'Winner!', 'orange', 'flicker raw']]];
+    S.button = { ...S.button, html: S.button.html.replace('#', `${params.get('part') || 1} OF ${params.get('of') || 2}`) };
+  }
   if (S === STORIES.poll) {
     S.button = { ...S.button, html: S.button.html.replace('#', `${params.get('part') || 1} OF ${params.get('of') || 2}`) };
   }
