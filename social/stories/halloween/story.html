@@ -51,6 +51,9 @@
   .row svg { flex: none; }
   .row span { margin-left: 18px; font-family: 'Anton'; font-size: 28px; letter-spacing: 0.08em; color: #fff; padding-top: 2px; }
   .row span em { font-style: normal; color: var(--orange); }
+  .plain .row span em { color: var(--teal); }
+  .plain #moon, .plain #bats, .plain #spider { display: none; }
+  .plain .photo { box-shadow: 0 0 40px rgba(61,139,145,0.25); }
 
   #btn { position: absolute; left: 67px; top: 887px; height: 79px; }
   #btnsvg { position: absolute; left: 0; top: 0; overflow: visible; }
@@ -176,6 +179,8 @@
 <script>
   const ICONS = {
     mail: '<rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.6 6.6l8.4 6.4 8.4-6.4"/>',
+    users: '<circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3.2 2.9-5 5.5-5s4.9 1.8 5.5 5"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 14.2c2.4.2 4.3 1.8 4.8 4.8"/>',
+    glass: '<path d="M7 3h10l-1 6a4 4 0 0 1-8 0z"/><path d="M12 13v7M8.5 20.5h7"/>',
     calendar: '<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/>',
     pin: '<path d="M12 21s-6.5-6.2-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 14.8 12 21 12 21z"/><circle cx="12" cy="9.8" r="2.4"/>',
     mask: '<path d="M2.5 8.5c3-1.6 6.2-1.6 9.5 0 3.3-1.6 6.5-1.6 9.5 0 0 5-2.6 8-5.6 8-1.8 0-2.8-1.3-3.9-2.7-1.1 1.4-2.1 2.7-3.9 2.7-3 0-5.6-3-5.6-8z"/><path d="M6.3 11.2c.9-.6 2-.6 2.9 0M14.8 11.2c.9-.6 2-.6 2.9 0"/>',
@@ -314,6 +319,30 @@
       prize: 'A day on the boat with the FOM inner circle for the winner plus one!', prizeTop: 905,
       visit: 'Thank you to everyone who dressed up and <b>voted!</b>', visitTop: 1047,
     },
+    // Tie reveal: ?story=tie&photos=a.jpg,b.jpg&badges=NO. 1 • 80s AEROBICS|NO. 3 • THE JOKER
+    tie: {
+      kicker: 'COSTUME CONTEST',
+      lines: [
+        [['And the winner is\u2026', 'white']],
+        [['It\u2019s a tie!', 'orange', 'flicker', 1.35]],
+      ],
+      noTag: true, shift: 34, moonTop: 1160, gridTop: 530, btnTop: 935,
+      button: { icon: 'crown', html: 'CONGRATS TO OUR <b>TWO WINNERS</b>' },
+      visit: 'Thank you to everyone who dressed up and <b>voted!</b>', visitTop: 1042,
+    },
+    // Prize flyer, brand colors only (no Halloween extras): ?story=boat&photo=boat.jpg
+    boat: {
+      kicker: 'CONTEST PRIZE', plain: true,
+      lines: [[['A day on', 'white'], [' the water', 'teal']]],
+      noTag: true, noButton: true, shift: 34,
+      photoTop: 432, photoH: 440, bigText: '+1', bigColor: 'teal',
+      rows: [
+        { icon: 'users', html: 'YOU <em>+ 1</em>' },
+        { icon: 'crown', html: 'FOM MIAMI <em>INNER CIRCLE</em>' },
+        { icon: 'glass', html: 'FOOD AND DRINKS <em>INCLUDED</em>' },
+      ],
+      rowsTop: 900,
+    },
     ballot2: {
       kicker: 'COSTUME CONTEST',
       lines: [[['Who wore it', 'white'], [' best?', 'orange', 'flicker']]],
@@ -438,21 +467,23 @@
   if (single) addPhoto(single);
   const many = params.get('photos') ? params.get('photos').split(',') : [];
   const start = +(params.get('start') || 1);
-  many.forEach((src, i) => addPhoto(src, `NO. ${start + i}`));
+  const badges = params.get('badges') ? params.get('badges').split('|') : null;
+  many.forEach((src, i) => addPhoto(src, badges ? badges[i] : `NO. ${start + i}`));
 
   function layoutPhotos() {
     if (single) {
       const top = S.photoTop || 398, h = S.photoH || 600, w = Math.round(h * aspect(slots[0]));
       place(slots[0], 67, top, w, h);
       const big = document.getElementById('bignum');
-      big.textContent = NUM.padStart(2, '0');
+      big.textContent = S.bigText || NUM.padStart(2, '0');
+      if (S.bigColor) big.style.webkitTextStroke = `2px var(--${S.bigColor})`;
       const fs = S.photoH ? 150 : 160;
       Object.assign(big.style, { display: 'block', left: `${67 + w + 15}px`, top: `${top + h - 156 * fs / 160}px`, fontSize: `${fs}px` });
       if (S.winnerMark) Object.assign(document.getElementById('crownmark').style, { display: 'block', left: `${67 + w + 18}px`, top: `${top + 6}px` });
     }
     if (!many.length) return;
     // Rows of up to `cols` photos share one height: the tallest that lets every row fit the 586px column.
-    const cols = +(params.get('cols') || 3), gap = 14, top = 398, maxH = +(params.get('maxh') || 420);
+    const cols = +(params.get('cols') || 3), gap = 14, top = S.gridTop || 398, maxH = +(params.get('maxh') || 420);
     const rows = [];
     for (let i = 0; i < slots.length; i += cols) rows.push(slots.slice(i, i + cols));
     const h = Math.floor(Math.min(maxH, ...rows.map(r => (586 - gap * (r.length - 1)) / r.reduce((a, sl) => a + aspect(sl), 0))));
@@ -494,22 +525,27 @@
     if (S.twoCol) document.getElementById('ptext').textContent = prize || 'PRIZE GOES HERE';
   }
   if (S.noButton) document.getElementById('btn').style.display = 'none';
+  else {
+    document.getElementById('icon').innerHTML = ICONS[S.button.icon];
+    document.getElementById('btnlabel').innerHTML = S.button.html;
+  }
   if (S.shift) {
     [['logo', 140], ['kicker', 166], ['rule', 261], ['flow', 301], ['ballot', 404]].forEach(([id, top]) => {
       document.getElementById(id).style.top = `${top + S.shift}px`;
     });
   }
   if (S.moonTop) document.getElementById('moon').style.top = `${S.moonTop}px`;
+  if (S.plain) document.getElementById('stage').classList.add('plain');
+  if (S.rowsTop) {
+    const headH = S.lines.reduce((a, l) => a + 71 * (l[0][3] || 1), 0);
+    document.getElementById('rows').style.marginTop = `${S.rowsTop - 301 - (S.shift || 0) - headH}px`;
+  }
   if (S.visitTop) document.getElementById('visit').style.top = `${S.visitTop}px`;
   if (S.prizeTop) {
     const pb = document.getElementById('prizebox');
     Object.assign(pb.style, { display: 'block', top: `${S.prizeTop}px` });
     pb.innerHTML = `<div class="prize" style="margin:0"><div class="plabel"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f2802e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICONS.trophy}</svg>THE PRIZE</div><div class="ptext"></div></div>`;
     pb.querySelector('.ptext').textContent = S.prize;
-  }
-  else {
-    document.getElementById('icon').innerHTML = ICONS[S.button.icon];
-    document.getElementById('btnlabel').innerHTML = S.button.html;
   }
   document.getElementById('visit').innerHTML = S.visit || '';
 
