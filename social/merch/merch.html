@@ -1,0 +1,211 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: 'Cormorant'; font-weight: 300 700; src: url(../stories/weekly/fonts/cormorant.woff2) format('woff2'); }
+  @font-face { font-family: 'Cormorant'; font-style: italic; font-weight: 300 700; src: url(../stories/weekly/fonts/cormorant-italic.woff2) format('woff2'); }
+  @font-face { font-family: 'Inter'; font-weight: 100 900; src: url(../stories/trusted-partner/fonts/inter.woff2) format('woff2'); }
+  html, body { margin: 0; padding: 0; background: transparent; }
+  #stage { position: relative; overflow: hidden; }
+  svg text { font-kerning: normal; }
+  .serif { font-family: 'Cormorant'; font-weight: 500; }
+  .ital { font-family: 'Cormorant'; font-style: italic; font-weight: 500; }
+  .sans { font-family: 'Inter'; }
+
+  /* Lookbook */
+  .lb { width: 2400px; background: #0a0a0a; color: #efe6d5; padding: 120px 110px 140px; box-sizing: border-box; }
+  .lb h1 { margin: 0; font-family: 'Cormorant'; font-weight: 500; font-size: 150px; line-height: 0.9; }
+  .lb h1 em { color: #3fa597; }
+  .lb .kick { font-family: 'Inter'; font-size: 26px; letter-spacing: 0.34em; color: #3fa597; margin-bottom: 30px; }
+  .lb .grid { margin-top: 90px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 34px; }
+  .lb .card { background: #161616; border-radius: 22px; overflow: hidden; }
+  .lb .card img { width: 100%; display: block; }
+  .lb .card div { padding: 22px 26px 28px; }
+  .lb .card b { display: block; font-family: 'Cormorant'; font-weight: 600; font-size: 40px; }
+  .lb .card span { font-family: 'Inter'; font-size: 19px; letter-spacing: 0.12em; color: rgba(239,230,213,0.7); }
+  .lb .foot { margin-top: 80px; font-family: 'Inter'; font-size: 22px; letter-spacing: 0.3em; color: rgba(239,230,213,0.6); }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script>
+  const params = new URLSearchParams(location.search);
+  const ITEM = params.get('item') || 'offduty_tee';
+  const MODE = params.get('mode') || 'mock';   // print | mock | lookbook
+  const stage = document.getElementById('stage');
+
+  const C = { cream: '#efe6d5', ink: '#0a1513', teal: '#1f6e66', glow: '#3fa597' };
+
+  // Rough stamp texture: knocks small specks out of the ink so it reads as a real stamp.
+  const ROUGH = `<filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="2" seed="3" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.2 1.8" result="m"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="8" result="w"/>
+      <feDisplacementMap in="SourceGraphic" in2="w" scale="10" result="d"/>
+      <feComposite in="d" in2="m" operator="in"/></filter>`;
+
+  // Artwork, each in its own print area (CSS px; rendered at a scale factor for print).
+  const ART = {
+    offduty: { w: 1500, h: 1800, svg: ink => `<defs>${ROUGH}</defs>
+      <g filter="url(#rough)" transform="rotate(-8 750 900)" fill="${ink}" stroke="${ink}">
+        <rect x="190" y="640" width="1120" height="440" rx="44" fill="none" stroke-width="30"/>
+        <rect x="222" y="672" width="1056" height="376" rx="28" fill="none" stroke-width="7"/>
+        <text x="750" y="770" text-anchor="middle" class="sans" font-weight="700" font-size="46" letter-spacing="16" stroke="none">FRIENDS OF MEDICINE</text>
+        <text x="752" y="940" text-anchor="middle" class="sans" font-weight="800" font-size="172" letter-spacing="8" stroke="none">OFF DUTY</text>
+        <text x="750" y="1030" text-anchor="middle" class="sans" font-weight="700" font-size="44" letter-spacing="16" stroke="none">REFILLS: UNLIMITED</text>
+      </g>
+      <text x="750" y="1330" text-anchor="middle" class="sans" font-weight="600" font-size="40" letter-spacing="14" fill="${ink}" opacity="0.75">TAKE AS NEEDED. ALL WEEKEND.</text>` },
+
+    offduty_cap: { w: 1200, h: 500, svg: ink => `
+      <g fill="${ink}" stroke="${ink}">
+        <rect x="90" y="70" width="1020" height="360" rx="40" fill="none" stroke-width="24"/>
+        <text x="604" y="312" text-anchor="middle" class="sans" font-weight="800" font-size="168" letter-spacing="10" stroke="none">OFF DUTY</text>
+      </g>` },
+
+    orders: { w: 1500, h: 1800, svg: ink => `
+      <text x="750" y="620" text-anchor="middle" class="ital" font-size="170" fill="${ink}">Doctor’s orders:</text>
+      <text x="740" y="1010" text-anchor="middle" class="serif" font-size="430" fill="${ink}" letter-spacing="-6">Unwind<tspan fill="${C.glow}">.</tspan></text>
+      <text x="750" y="1230" text-anchor="middle" class="serif" font-weight="600" font-size="130" fill="${C.glow}">℞</text>
+      <text x="750" y="1330" text-anchor="middle" class="sans" font-weight="600" font-size="44" letter-spacing="18" fill="${ink}">FRIENDS OF MEDICINE</text>` },
+
+    tour: { w: 1500, h: 1800, svg: ink => {
+      const days = [['MON', 'TO-DO LIST'], ['TUE', 'TECH TUESDAY'], ['WED', 'WELLNESS WEDNESDAY'], ['THU', 'UNWIND THURSDAY'],
+                    ['FRI', 'FOUNDERS FRIDAY'], ['SAT', 'OFF-CALL'], ['SUN', 'RESET']];
+      return `
+      <text x="750" y="210" text-anchor="middle" class="sans" font-weight="700" font-size="62" letter-spacing="22" fill="${ink}">FRIENDS OF MEDICINE</text>
+      <text x="750" y="520" text-anchor="middle" class="ital" font-size="330" fill="${C.glow}">The Week</text>
+      <text x="780" y="660" text-anchor="middle" class="sans" font-weight="800" font-size="120" letter-spacing="64" fill="${ink}">TOUR</text>
+      ${days.map(([d, n], i) => { const y = 860 + i * 110; return `
+        <line x1="230" x2="1270" y1="${y - 72}" y2="${y - 72}" stroke="${ink}" stroke-opacity="0.22" stroke-width="3"/>
+        <text x="260" y="${y}" class="sans" font-weight="700" font-size="44" letter-spacing="8" fill="${C.glow}">${d}</text>
+        <text x="440" y="${y}" class="sans" font-weight="800" font-size="62" letter-spacing="4" fill="${ink}">${n}</text>`; }).join('')}
+      <line x1="230" x2="1270" y1="1558" y2="1558" stroke="${ink}" stroke-opacity="0.22" stroke-width="3"/>
+      <text x="750" y="1660" text-anchor="middle" class="sans" font-weight="700" font-size="44" letter-spacing="14" fill="${C.glow}">MIAMI • FT. LAUDERDALE • DALLAS</text>
+      <text x="750" y="1740" text-anchor="middle" class="sans" font-weight="500" font-size="32" letter-spacing="12" fill="${ink}" opacity="0.7">WHERE PROXIMITY CREATES OPPORTUNITY</text>`; } },
+
+    tour_front: { w: 1500, h: 1800, svg: ink => `
+      <text x="1050" y="330" text-anchor="middle" class="ital" font-size="120" fill="${C.glow}">The Week</text>
+      <text x="1050" y="410" text-anchor="middle" class="sans" font-weight="800" font-size="50" letter-spacing="26" fill="${ink}">TOUR</text>` },
+
+    human: { w: 1500, h: 1800, svg: ink => `
+      <text x="750" y="720" text-anchor="middle" class="ital" font-size="270" fill="${ink}">We’re</text>
+      <text x="750" y="1080" text-anchor="middle" class="ital" font-weight="600" font-size="430" fill="${C.teal}">human</text>
+      <text x="750" y="1320" text-anchor="middle" class="ital" font-size="270" fill="${ink}">too.</text>
+      <text x="750" y="1500" text-anchor="middle" class="sans" font-weight="600" font-size="42" letter-spacing="18" fill="${C.teal}">FRIENDS OF MEDICINE</text>` },
+
+    proximity: { w: 1500, h: 1500, svg: ink => `<defs>
+        <filter id="wc"><feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="3" seed="4"/><feDisplacementMap in="SourceGraphic" scale="80"/></filter>
+        <radialGradient id="tg" cx="40%" cy="40%"><stop offset="0" stop-color="#2a8378"/><stop offset="1" stop-color="#16564f"/></radialGradient></defs>
+      <circle cx="1220" cy="270" r="210" fill="url(#tg)" filter="url(#wc)"/>
+      <text x="170" y="520" class="serif" font-size="236" fill="${ink}">Where</text>
+      <text x="170" y="745" class="ital" font-size="236" fill="${C.teal}">Proximity</text>
+      <text x="170" y="970" class="serif" font-size="236" fill="${ink}">Creates</text>
+      <text x="170" y="1195" class="ital" font-size="236" fill="${C.teal}">Opportunity</text>
+      <text x="176" y="1360" class="sans" font-weight="600" font-size="44" letter-spacing="18" fill="${ink}">FRIENDS OF MEDICINE</text>` },
+
+    water: { w: 2000, h: 800, svg: ink => `
+      <text x="110" y="330" class="serif" font-size="160" fill="${ink}">Drink more water</text>
+      <text x="110" y="510" class="ital" font-size="160" fill="${C.teal}">than coffee.</text>
+      <text x="116" y="640" class="sans" font-weight="600" font-size="30" letter-spacing="9" fill="${ink}" opacity="0.8">DOCTOR’S ORDERS • FRIENDS OF MEDICINE</text>
+      <text x="1530" y="560" text-anchor="middle" class="serif" font-weight="600" font-size="420" fill="${C.teal}">℞</text>
+      <text x="1530" y="660" text-anchor="middle" class="sans" font-weight="600" font-size="34" letter-spacing="12" fill="${ink}" opacity="0.8">REFILLS: UNLIMITED</text>` },
+  };
+
+  // Products: which art, which ink, which blank and colour.
+  const ITEMS = {
+    offduty_tee:   { name: 'OFF DUTY Tee', sub: 'CREAM ON BLACK', blank: 'tee', color: '#121212', art: 'offduty', ink: C.cream },
+    offduty_cap:   { name: 'OFF DUTY Dad Hat', sub: 'EMBROIDERED, BLACK', blank: 'cap', color: '#141414', art: 'offduty_cap', ink: C.cream },
+    orders_hoodie: { name: 'Doctor’s Orders Hoodie', sub: 'CREAM ON BLACK', blank: 'hoodie', color: '#111312', art: 'orders', ink: C.cream },
+    tour_tee:      { name: 'The Week Tour Tee', sub: 'BACK PRINT, BLACK', blank: 'tee_back', color: '#121212', art: 'tour', ink: C.cream },
+    human_tee:     { name: 'We’re Human Too Tee', sub: 'INK ON CREAM', blank: 'tee', color: '#ece2cf', art: 'human', ink: C.ink },
+    proximity_tote:{ name: 'Proximity Tote', sub: 'NATURAL CANVAS', blank: 'tote', color: '#e6dbc4', art: 'proximity', ink: C.ink },
+    water_mug:     { name: 'Water Over Coffee Mug', sub: '11 OZ, WHITE', blank: 'mug', color: '#f6f4ef', art: 'water', ink: C.ink },
+  };
+
+  const artSvg = (key, ink, w, h) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${ART[key].w} ${ART[key].h}" width="${w}" height="${h}">${ART[key].svg(ink)}</svg>`;
+
+  // Blank garments drawn as flat mockups on a 1200x1500 canvas.
+  function shade(id, color) {
+    return `<linearGradient id="${id}" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#000" stop-opacity="0.35"/><stop offset="0.18" stop-color="#000" stop-opacity="0.05"/>
+      <stop offset="0.5" stop-color="#fff" stop-opacity="0.05"/><stop offset="0.82" stop-color="#000" stop-opacity="0.05"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.35"/></linearGradient>`;
+  }
+  const BLANKS = {
+    tee: (c, back) => {
+      const body = 'M410 170 C470 215 730 215 790 170 L1030 285 L1150 560 L990 620 L950 520 L950 1400 C760 1425 440 1425 250 1400 L250 520 L210 620 L50 560 L170 285 Z';
+      const collar = back ? 'M410 170 C470 200 730 200 790 170' : 'M410 170 C470 258 730 258 790 170';
+      return `<defs>${shade('sh', c)}</defs>
+        <path d="${body}" fill="${c}"/><path d="${body}" fill="url(#sh)"/>
+        <path d="${collar}" fill="none" stroke="#000" stroke-opacity="0.35" stroke-width="26"/>
+        <path d="M250 520 L250 600 M950 520 L950 600" stroke="#000" stroke-opacity="0.15" stroke-width="4"/>
+        <path d="M330 1100 C420 1140 470 1250 460 1390 M880 900 C820 980 820 1120 860 1250" fill="none" stroke="#000" stroke-opacity="0.035" stroke-width="18"/>`;
+    },
+    hoodie: c => {
+      const body = 'M400 240 C470 290 730 290 800 240 L1010 330 L1140 1190 L1010 1220 L950 650 L950 1360 C760 1395 440 1395 250 1360 L250 650 L190 1220 L60 1190 L190 330 Z';
+      return `<defs>${shade('sh', c)}</defs>
+        <path d="M360 300 C320 10 880 10 840 300 Z" fill="${c}"/><path d="M360 300 C320 10 880 10 840 300 Z" fill="#000" opacity="0.18"/>
+        <path d="M450 285 C440 120 760 120 750 285 Z" fill="#000" opacity="0.5"/>
+        <path d="${body}" fill="${c}"/><path d="${body}" fill="url(#sh)"/>
+        <path d="M250 1360 L250 1430 C440 1462 760 1462 950 1430 L950 1360" fill="${c}"/><path d="M250 1360 L250 1430 C440 1462 760 1462 950 1430 L950 1360" fill="#000" opacity="0.2"/>
+        <path d="M1140 1190 L1150 1260 L1020 1290 L1010 1220 Z M60 1190 L50 1260 L180 1290 L190 1220 Z" fill="#000" opacity="0.3"/>
+        <path d="M420 250 C470 330 730 330 780 250" fill="none" stroke="#000" stroke-opacity="0.4" stroke-width="22"/>
+        <path d="M380 1000 L820 1000 L880 1300 L320 1300 Z" fill="none" stroke="#000" stroke-opacity="0.3" stroke-width="6"/>
+        <path d="M560 318 L548 470 M640 318 L652 470" stroke="#d9d2c4" stroke-width="9" stroke-linecap="round"/>
+        <circle cx="548" cy="478" r="8" fill="#d9d2c4"/><circle cx="652" cy="478" r="8" fill="#d9d2c4"/>`;
+    },
+    cap: c => `<defs><radialGradient id="cs" cx="45%" cy="35%" r="70%"><stop offset="0" stop-color="#fff" stop-opacity="0.1"/><stop offset="1" stop-color="#000" stop-opacity="0.45"/></radialGradient></defs>
+        <path d="M250 900 C230 430 970 430 950 900 Z" fill="${c}"/><path d="M250 900 C230 430 970 430 950 900 Z" fill="url(#cs)"/>
+        <path d="M600 480 L600 900 M445 585 C412 690 404 800 406 900 M755 585 C788 690 796 800 794 900" fill="none" stroke="#000" stroke-opacity="0.35" stroke-width="5"/>
+        <circle cx="600" cy="472" r="16" fill="${c}" stroke="#000" stroke-opacity="0.4" stroke-width="4"/>
+        <path d="M215 950 C380 1010 820 1010 985 950 C960 1040 860 1085 600 1088 C340 1085 240 1040 215 950 Z" fill="#000" opacity="0.75"/>
+        <path d="M200 905 C380 870 820 870 1000 905 C990 975 880 1022 600 1026 C320 1022 210 975 200 905 Z" fill="${c}"/>
+        <path d="M200 905 C380 870 820 870 1000 905 C990 975 880 1022 600 1026 C320 1022 210 975 200 905 Z" fill="#fff" opacity="0.06"/>
+        <path d="M235 925 C400 895 800 895 965 925" fill="none" stroke="#fff" stroke-opacity="0.18" stroke-width="3" stroke-dasharray="10 9"/>`,
+    tote: c => `<defs>${shade('sh', c)}</defs>
+        <path d="M400 470 C400 150 560 150 560 470 M640 470 C640 150 800 150 800 470" fill="none" stroke="${c}" stroke-width="40"/>
+        <path d="M400 470 C400 150 560 150 560 470 M640 470 C640 150 800 150 800 470" fill="none" stroke="#000" stroke-opacity="0.18" stroke-width="40"/>
+        <rect x="230" y="450" width="740" height="920" rx="8" fill="${c}"/><rect x="230" y="450" width="740" height="920" rx="8" fill="url(#sh)"/>
+        <rect x="230" y="450" width="740" height="40" fill="#000" opacity="0.08"/>`,
+    mug: c => `<defs><linearGradient id="ms" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity="0.25"/><stop offset="0.3" stop-color="#fff" stop-opacity="0.15"/><stop offset="0.7" stop-color="#000" stop-opacity="0.02"/><stop offset="1" stop-color="#000" stop-opacity="0.3"/></linearGradient>
+        <clipPath id="mugclip"><path d="M300 520 L900 520 L900 1120 C900 1170 860 1200 800 1200 L400 1200 C340 1200 300 1170 300 1120 Z"/></clipPath></defs>
+        <path d="M900 640 C1080 640 1080 1000 900 1000" fill="none" stroke="${c}" stroke-width="56"/>
+        <path d="M900 640 C1080 640 1080 1000 900 1000" fill="none" stroke="#000" stroke-opacity="0.15" stroke-width="56"/>
+        <path d="M300 520 L900 520 L900 1120 C900 1170 860 1200 800 1200 L400 1200 C340 1200 300 1170 300 1120 Z" fill="${c}"/>
+        <ellipse cx="600" cy="520" rx="300" ry="44" fill="#e9e5dc"/><ellipse cx="600" cy="524" rx="272" ry="34" fill="#3a2a1e"/>`,
+  };
+
+  // Where each blank's artwork sits on the 1200x1500 mockup.
+  const PLACE = {
+    tee: [375, 330, 450], tee_back: [310, 290, 580], hoodie: [400, 400, 400], cap: [420, 660, 360], tote: [300, 560, 600], mug: [325, 690, 880],
+  };
+
+  if (MODE === 'print') {
+    const it = ITEMS[ITEM], a = ART[it.art];
+    stage.style.width = `${a.w}px`; stage.style.height = `${a.h}px`;
+    stage.innerHTML = artSvg(it.art, it.ink, a.w, a.h);
+  } else if (MODE === 'mock') {
+    const it = ITEMS[ITEM], a = ART[it.art], [x, y, w] = PLACE[it.blank];
+    const h = w * a.h / a.w;
+    const light = ['#ece2cf', '#e6dbc4', '#f6f4ef'].includes(it.color);
+    stage.style.width = '1200px'; stage.style.height = '1500px';
+    stage.style.background = light ? 'radial-gradient(circle at 50% 40%, #d9d4cb, #b9b2a6)' : 'radial-gradient(circle at 50% 40%, #e9e4da, #c9c2b5)';
+    const blank = it.blank === 'tee_back' ? BLANKS.tee(it.color, true) : BLANKS[it.blank](it.color);
+    const artEl = `<g${it.blank === 'mug' ? ' clip-path="url(#mugclip)"' : ''}><svg x="${x}" y="${y}" width="${w}" height="${h}" viewBox="0 0 ${a.w} ${a.h}">${a.svg(it.ink)}</svg></g>`;
+    // The mug shows the front half of its wrap; the rest is on the far side.
+    stage.innerHTML = `<svg viewBox="0 0 1200 1500" width="1200" height="1500">
+      <ellipse cx="600" cy="1440" rx="420" ry="34" fill="#000" opacity="0.12"/>
+      ${blank}${artEl}
+      ${it.blank === 'cap' ? '<path d="M250 860 C250 440 950 440 950 860 Z" fill="url(#cs)" opacity="0.4"/>' : ''}</svg>`;
+  } else {
+    stage.innerHTML = `<div class="lb">
+      <div class="kick">FRIENDS OF MEDICINE • MERCH</div>
+      <h1>Drop <em>01</em></h1>
+      <div class="grid">${Object.entries(ITEMS).map(([k, it]) => `<div class="card"><img src="${params.get('dir') || 'mockups'}/${k}.png"><div><b>${it.name}</b><span>${it.sub}</span></div></div>`).join('')}</div>
+      <div class="foot">WHERE PROXIMITY CREATES OPPORTUNITY</div></div>`;
+  }
+  window.render = () => {};
+</script>
+</body>
+</html>
