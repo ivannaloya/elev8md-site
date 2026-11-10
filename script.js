@@ -32,3 +32,21 @@ if ('IntersectionObserver' in window) {
 } else {
   reveals.forEach(el => el.classList.add('is-visible'));
 }
+
+// Contact form: opens a pre-filled email to the concierge inbox
+const contactForm = document.getElementById('contactForm');
+contactForm?.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const f = contactForm.elements;
+  const status = document.getElementById('contactStatus');
+  let ok = true;
+  [f.name, f.email].forEach(el => {
+    const bad = !el.value.trim() || (el.type === 'email' && !el.checkValidity());
+    el.classList.toggle('is-invalid', bad);
+    if (bad) ok = false;
+  });
+  if (!ok) { status.textContent = 'Please add your name and a valid email.'; return; }
+  const body = `Name: ${f.name.value.trim()}\nEmail: ${f.email.value.trim()}\nPhone: ${f.phone.value.trim() || 'n/a'}\n\n${f.message.value.trim()}`;
+  window.location.href = 'mailto:concierge@elev8md.co?subject=' + encodeURIComponent('Elev8 Inquiry: Not sure where to begin') + '&body=' + encodeURIComponent(body);
+  status.textContent = 'Thank you. Your email app should open with your message ready to send.';
+});

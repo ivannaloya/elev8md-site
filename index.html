@@ -61,7 +61,7 @@
     <a href="#team">Team</a>
     <a href="#locations">Locations</a>
   </div>
-  <a href="#book" class="nav__cta">Book Now</a>
+  <a href="#services" class="nav__cta">Book Now</a>
   <button class="nav__toggle" id="menuOpen" aria-label="Open menu"><span></span></button>
 </nav>
 
@@ -72,7 +72,7 @@
   <a href="#philosophy">Philosophy</a>
   <a href="#team">Team</a>
   <a href="#locations">Locations</a>
-  <a href="#book">Book Now</a>
+  <a href="#services">Book Now</a>
 </div>
 
 <main id="top">
@@ -316,6 +316,21 @@
           <a href="mailto:concierge@elev8md.co?subject=Elev8%20Private%20Assessment%20Request" class="btn btn--gold begin__cta">Book the Assessment</a>
         </div>
 
+      </div>
+
+      <div class="contact-form reveal" id="contact">
+        <h3 class="contact-form__head">Not sure where to begin?</h3>
+        <p class="contact-form__sub">Reach out to us and let us help you find the right thing for you.</p>
+        <form id="contactForm" class="contact-form__form" novalidate>
+          <div class="contact-form__row">
+            <label class="contact-form__field"><span>Name</span><input type="text" name="name" autocomplete="name" required></label>
+            <label class="contact-form__field"><span>Email</span><input type="email" name="email" autocomplete="email" required></label>
+          </div>
+          <label class="contact-form__field"><span>Phone <em>(optional)</em></span><input type="tel" name="phone" autocomplete="tel"></label>
+          <label class="contact-form__field"><span>How can we help?</span><textarea name="message" rows="4"></textarea></label>
+          <button type="submit" class="btn btn--gold contact-form__submit">Send Message</button>
+          <p class="contact-form__status" id="contactStatus" role="status"></p>
+        </form>
       </div>
     </div>
   </section>
