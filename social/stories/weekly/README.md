@@ -1,6 +1,6 @@
 # Weekly story series (rebrand style)
 
-`weekly.html?day=mon|tue|wed|thu|fri` renders one story (720x1280 page, render with `SCALE=1.5` for 1080x1920).
+`weekly.html?day=mon|tue|wed|thu|fri|sat|sun` renders one story (720x1280 page, render with `SCALE=1.5` for 1080x1920).
 Quotes on Wednesday and Friday can be swapped from the URL: `&quote=...&by=...`.
 
 ```sh
