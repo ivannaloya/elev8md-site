@@ -119,7 +119,7 @@
     },
     wed: () => {
       stage.className = 'light';
-      const q = quote('Your health is the foundation everything else is built on.', 'FRIENDS OF MEDICINE');
+      const q = quote('Sometimes you’ve got to set that weight down and just relax for a minute.', 'DR. ALEXA ROSE<br>PEDIATRIC NEUROSURGEON');
       return `
         <svg class="layer" width="720" height="1280"><defs>
           <filter id="wc2"><feTurbulence id="turb" type="fractalNoise" baseFrequency="0.009" numOctaves="3" seed="9"/><feDisplacementMap in="SourceGraphic" scale="70"/></filter>
@@ -127,11 +127,11 @@
           <path id="wave" d="M720 120 C600 180 470 300 520 470 C560 600 440 700 500 860 C540 980 470 1100 560 1280 L720 1280 Z" fill="url(#tg2)" filter="url(#wc2)"/></svg>
         ${topRow('WELLNESS WEDNESDAY')}
         ${headline(['Wellness', 'Wednesday'], 280, 96)}
-        <div class="qmark" style="top:470px;color:var(--teal)" data-a="fade" data-t="1.6">“</div>
-        <div class="quote" style="top:560px;width:400px;font-size:40px;line-height:46px" data-a="fade" data-t="1.9">${q.text}</div>
-        <div class="rule" style="top:760px;background:var(--teal)" data-a="draw" data-t="2.4"></div>
-        <div class="attrib" style="top:780px;color:var(--teal)" data-a="fade" data-t="2.5">${q.by}</div>
-        <div class="pillars" style="top:830px" data-a="fade" data-t="2.8">HEALTH<br>LONGEVITY<br>MENTAL HEALTH<br>PERFORMANCE</div>
+        <div class="qmark" style="top:455px;color:var(--teal)" data-a="fade" data-t="1.6">“</div>
+        <div class="quote" style="top:540px;width:400px;font-size:36px;line-height:42px" data-a="fade" data-t="1.9">${q.text}</div>
+        <div class="rule" style="background:var(--teal)" data-a="draw" data-t="2.4"></div>
+        <div class="attrib" style="color:var(--teal);line-height:20px" data-a="fade" data-t="2.5">${q.by}</div>
+        <div class="pillars" data-a="fade" data-t="2.8">HEALTH<br>LONGEVITY<br>MENTAL HEALTH<br>PERFORMANCE</div>
         ${cta(950, 'SHARE YOUR WELLNESS TIP', 'arrow', 'Tag @friends_of_medicine')}
         ${footer()}`;
     },
@@ -149,14 +149,14 @@
     },
     fri: () => {
       stage.className = 'dark';
-      const q = quote('Your time is limited, so don’t waste it living someone else’s life.', 'STEVE JOBS • STANFORD, 2005');
+      const q = quote('In the business of healthcare, the most important hand is the one you don’t shake.', 'DR. ANDRÉ COOMBS • FOUNDER');
       return `
         <svg id="city" class="layer" width="720" height="1280"></svg>
         ${topRow('FOUNDERS FRIDAY')}
         ${headline(['Founders', '<em>Friday</em>'], 280, 128)}
         <div class="quote" style="top:530px;width:560px;font-size:36px;line-height:42px" data-a="fade" data-t="1.6">“${q.text}”</div>
-        <div class="rule" style="top:640px;background:var(--glow)" data-a="draw" data-t="2.2"></div>
-        <div class="attrib" style="top:660px;color:var(--glow)" data-a="fade" data-t="2.3">${q.by}</div>
+        <div class="rule" style="background:var(--glow)" data-a="draw" data-t="2.2"></div>
+        <div class="attrib" style="color:var(--glow);line-height:20px" data-a="fade" data-t="2.3">${q.by}</div>
         ${cta(952, 'NOMINATE A FOUNDER', 'mail', 'info@friendsofmed.com')}
         ${footer()}`;
     },
@@ -229,7 +229,17 @@
   const easeOut = p => 1 - Math.pow(1 - p, 3);
 
   const animated = [...document.querySelectorAll('[data-a]')];
+  // The rule, attribution and pillars sit under the quote, however many lines it runs.
+  function layoutQuote() {
+    const q = stage.querySelector('.quote'); if (!q) return;
+    let y = q.offsetTop + q.offsetHeight + 18;
+    stage.querySelector('.rule').style.top = `${y}px`; y += 20;
+    const a = stage.querySelector('.attrib'); a.style.top = `${y}px`; y += a.offsetHeight + 32;
+    const pl = stage.querySelector('.pillars'); if (pl) pl.style.top = `${y}px`;
+  }
+
   window.render = function (t) {
+    layoutQuote();
     animated.forEach(el => {
       const s = +el.dataset.t, p = easeOut(prog(t, s, s + 0.6));
       switch (el.dataset.a) {
