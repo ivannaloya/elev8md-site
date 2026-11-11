@@ -228,7 +228,6 @@
       stage.className = 'dark';
       return `
         <div id="stars" class="layer"></div>
-        <div class="elevens" data-a="fade" data-t="1.2">11.11</div>
         <canvas id="flag" width="480" height="270" style="position:absolute;left:60px;top:742px;width:320px;height:180px"></canvas>
         ${topRow('VETERANS DAY')}
         ${headline(['Thank you for', '<em>your service</em>'], 280, 100)}
@@ -461,10 +460,10 @@
       if (!window.FLAG_SRC) {
         const src = document.createElement('canvas'); src.width = fw * 2; src.height = fh * 2;
         const g = src.getContext('2d'); g.scale(2, 2);
-        for (let i = 0; i < 13; i++) { g.fillStyle = i % 2 ? '#efe6d5' : '#b0353a'; g.fillRect(0, i * fh / 13, fw, fh / 13 + 0.5); }
+        for (let i = 0; i < 13; i++) { g.fillStyle = i % 2 ? '#e9dfcc' : '#1f6e66'; g.fillRect(0, i * fh / 13, fw, fh / 13 + 0.5); }
         const cw = fw * 0.4, ch = fh * 7 / 13;
-        g.fillStyle = '#1c2b4c'; g.fillRect(0, 0, cw, ch);
-        g.fillStyle = '#efe6d5';
+        g.fillStyle = '#0c1d1a'; g.fillRect(0, 0, cw, ch);
+        g.fillStyle = '#e0a85a';
         for (let r = 0; r < 9; r++) for (let c = 0; c < (r % 2 ? 5 : 6); c++) {
           const x = cw / 12 * (2 * c + (r % 2 ? 2 : 1)), y = ch / 10 * (r + 1), rr = 2.6;
           g.beginPath();
@@ -474,7 +473,7 @@
         window.FLAG_SRC = src;
       }
       const ctx = flag.getContext('2d'); ctx.setTransform(1.5, 0, 0, 1.5, 0, 0); ctx.clearRect(0, 0, 320, 180);
-      const pf = easeOut(prog(t, 1.8, 2.8)); ctx.globalAlpha = pf;
+      const pf = easeOut(prog(t, 1.8, 2.8)); ctx.globalAlpha = pf * 0.9;
       ctx.fillStyle = 'rgba(224,168,90,0.8)'; ctx.fillRect(6, 4, 4, 172);
       const cols = 57, sw = fw / cols;
       for (let i = 0; i < cols; i++) {
