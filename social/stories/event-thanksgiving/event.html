@@ -1,0 +1,198 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: 'Montserrat'; font-weight: 100 900; src: url(fonts/montserrat.woff2) format('woff2'); }
+  @font-face { font-family: 'Playfair'; font-style: italic; font-weight: 400 900; src: url(fonts/playfair.woff2) format('woff2'); }
+
+  /* Palette sampled from the final Thanksgiving Edition flyer. */
+  :root { --paper: #efe5d2; --ink: #161616; --teal: #1d5e57; --cream: #f3ead8; }
+  html, body { margin: 0; padding: 0; background: #000; }
+  #stage { position: relative; width: 720px; height: 1280px; overflow: hidden; background: var(--paper); color: var(--ink);
+           font-family: 'Montserrat'; }
+  #grain { position: absolute; inset: 0; opacity: 0.35; mix-blend-mode: multiply; pointer-events: none; }
+
+  .abs { position: absolute; }
+  #vline { left: 370px; top: 0; width: 2px; height: 170px; background: var(--ink); transform-origin: top; }
+  #panel { left: 420px; top: 0; width: 300px; height: 640px; background: var(--teal); transform-origin: top right; }
+  #plus { right: 46px; top: 150px; width: 66px; height: 66px; }
+  .leaf { width: 28px; height: 28px; }
+
+  #title { left: 52px; top: 200px; font-weight: 900; font-size: 100px; line-height: 0.9; letter-spacing: -0.01em; }
+  #title span { display: block; overflow: clip; overflow-clip-margin: 10px; }
+  #title span i { display: inline-block; font-style: normal; }
+  #where { left: 120px; top: 395px; font-weight: 500; font-size: 30px; letter-spacing: 0.02em; }
+  #ecg { left: 52px; top: 438px; overflow: visible; }
+
+  #edition { right: 30px; top: 470px; text-align: right; color: var(--cream); }
+  #edition .t { font-family: 'Playfair'; font-style: italic; font-size: 43px; line-height: 1.02; }
+  #edition .s { margin-top: 14px; font-weight: 600; font-size: 11px; letter-spacing: 0.16em; }
+
+  /* The changing message for each story sits in the left column under the heartbeat line. */
+  #hero { left: 52px; top: 478px; width: 350px; }
+  #hero .big { font-weight: 900; font-size: 48px; line-height: 0.95; letter-spacing: -0.01em; }
+  #hero .big em { font-style: normal; color: var(--teal); }
+  #hero .num { font-weight: 900; font-size: 150px; line-height: 0.8; color: var(--teal); }
+  #hero .lbl { font-weight: 800; font-size: 26px; line-height: 1.05; letter-spacing: 0.04em; }
+  #hero .note { margin-top: 10px; font-family: 'Playfair'; font-style: italic; font-size: 20px; line-height: 1.25; color: var(--teal); }
+
+  #sky { left: 0; top: 610px; }
+
+  .rule { left: 52px; width: 290px; height: 2px; background: var(--ink); transform-origin: left; }
+  #date { left: 52px; top: 795px; font-weight: 800; font-size: 31px; letter-spacing: 0.01em; }
+  #time { left: 52px; top: 838px; font-weight: 500; font-size: 22px; letter-spacing: 0.05em; }
+
+  #cta { left: 52px; top: 900px; display: inline-flex; align-items: center; gap: 14px; height: 56px; padding: 0 26px;
+         background: var(--teal); color: var(--cream); font-weight: 700; font-size: 16px; letter-spacing: 0.18em; white-space: nowrap; }
+  #ctanote { left: 52px; top: 966px; font-family: 'Playfair'; font-style: italic; font-size: 20px; color: var(--teal); }
+  #sticker { left: 52px; top: 996px; width: 330px; height: 54px; border: 2px dashed rgba(29,94,87,0.35); border-radius: 14px; }
+  #sticker span { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+                  font-weight: 600; font-size: 12px; letter-spacing: 0.2em; color: rgba(29,94,87,0.55); }
+
+  #brand { left: 52px; top: 1060px; }
+  #brand b { display: block; font-weight: 800; font-size: 19px; letter-spacing: 0.02em; }
+  #brand span { font-family: 'Playfair'; font-style: italic; font-size: 16px; color: var(--teal); }
+  #site { right: 30px; top: 1046px; display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--teal); color: var(--cream);
+          font-weight: 600; font-size: 15px; letter-spacing: 0.12em; }
+  #site img { width: 40px; height: 40px; border-radius: 50%; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <svg id="grain" width="720" height="1280"><filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="5"/><feColorMatrix values="0 0 0 0 0.45  0 0 0 0 0.4  0 0 0 0 0.33  0 0 0 0.35 0"/></filter><rect width="720" height="1280" filter="url(#g)"/></svg>
+  <div id="vline" class="abs"></div>
+  <div id="panel" class="abs"></div>
+  <svg id="plus" class="abs" viewBox="0 0 24 24"><path d="M9 2h6v7h7v6h-7v7H9v-7H2V9h7z" fill="#f3ead8"/></svg>
+  <div id="leaves"></div>
+
+  <div id="title" class="abs"><span><i>UNWIND</i></span><span><i>THURSDAY</i></span></div>
+  <div id="where" class="abs">AT GISELLE, MIAMI</div>
+  <svg id="ecg" class="abs" width="300" height="40"><path id="ecgp" d="M0 26 H150 L158 20 L166 34 L176 0 L186 40 L194 22 L202 26 H300" fill="none" stroke="#161616" stroke-width="2"/></svg>
+
+  <div id="edition" class="abs"><div class="t">Thanksgiving<br>Edition</div><div class="s">A HARVEST OF GOOD COMPANY</div></div>
+  <div id="hero" class="abs"></div>
+
+  <canvas id="sky" class="abs" width="1080" height="270" style="width:720px;height:180px;top:590px"></canvas>
+
+  <div class="rule abs" id="r1" style="top:780px"></div>
+  <div id="date" class="abs"></div>
+  <div id="time" class="abs"></div>
+  <div class="rule abs" id="r2" style="top:880px"></div>
+
+  <div id="cta" class="abs"></div>
+  <div id="ctanote" class="abs"></div>
+  <div id="sticker" class="abs"><span>LINK STICKER GOES HERE</span></div>
+
+  <div id="brand" class="abs"><b>FRIENDS OF MEDICINE</b><span>Proximity creates opportunity.</span></div>
+  <div id="site" class="abs">FRIENDSOFMED.COM<img src="../weekly/logo-badge.png" alt=""></div>
+</div>
+
+<script>
+  const params = new URLSearchParams(location.search);
+  const V = params.get('v') || 'days3';
+  const DOWN = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v15M6 13l6 6 6-6"/></svg>';
+  const ARROW = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+
+  // One entry per story. link: true leaves room for an Instagram link sticker (posted by hand).
+  const STORIES = {
+    days3: { hero: `<div style="display:flex;align-items:flex-end;gap:14px"><div class="num">3</div><div class="lbl">DAYS<br>TO GO</div></div>
+                    <div class="note">Step away. Slow down. Show up.</div>`,
+             date: 'THIS THURSDAY, NOV 19', time: '7:30 TO 10:30 PM', cta: `GET YOUR TICKETS ${DOWN}`, note: 'Tap the link below.', link: true },
+    friend: { hero: `<div class="big">BRING<br><em>A FRIEND.</em></div><div class="note">Come alone or bring your plus one. We’ll introduce you.</div>`,
+             date: 'THURSDAY, NOVEMBER 19', time: '7:30 TO 10:30 PM', cta: `GET TWO TICKETS ${DOWN}`, note: 'Tap the link below.', link: true },
+    tomorrow: { hero: `<div class="big">TOMORROW<br><em>NIGHT.</em></div><div class="note">Last call for tickets. Spots are limited.</div>`,
+             date: 'THURSDAY, NOVEMBER 19', time: '7:30 TO 10:30 PM', cta: `GRAB YOUR SPOT ${DOWN}`, note: 'Tap the link below.', link: true },
+    today: { hero: `<div class="big">TODAY’S<br><em>THE DAY.</em></div><div class="note">Join us tonight for a harvest of good company.</div>`,
+             date: 'TONIGHT, NOVEMBER 19', time: '7:30 TO 10:30 PM', cta: `JOIN US TONIGHT ${DOWN}`, note: 'Last tickets at the link below.', link: true },
+    tonight: { hero: `<div class="big">SEE YOU<br><em>TONIGHT.</em></div><div class="note">Doors open at 7:30. Come as you are.</div>`,
+             date: 'GISELLE, MIAMI', time: '7:30 TO 10:30 PM', cta: `TICKETS AT THE DOOR ${DOWN}`, note: 'Or tap the link below.', link: true },
+    thanks: { hero: `<div class="big">THANK YOU,<br><em>MIAMI.</em></div><div class="note">For a night full of good company, new friends and real conversations.</div>`,
+             date: 'SEE YOU AT THE NEXT ONE', time: 'JOIN THE NETWORK AT FRIENDSOFMED.COM/PORTAL', cta: `JOIN THE PORTAL ${ARROW}`, note: 'friendsofmed.com/portal', link: false },
+  };
+  const S = STORIES[V];
+  document.getElementById('hero').innerHTML = S.hero;
+  document.getElementById('date').textContent = S.date;
+  document.getElementById('time').textContent = S.time;
+  document.getElementById('cta').innerHTML = S.cta;
+  document.getElementById('ctanote').textContent = S.note;
+  document.getElementById('sticker').style.display = S.link && !params.has('final') ? 'block' : 'none';
+  if (V === 'thanks') document.getElementById('time').style.fontSize = '15px';
+
+  // Maple leaves, like the flyer: a few on the teal panel, one by the date.
+  const LEAF = 'M12 1.5 L13.6 6.4 L16.2 4.9 L15.4 9.2 L19.4 8.1 L17.8 11.7 L21.6 12.8 L17.2 15 L18.3 17.2 L13.1 16.4 L12.8 22.5 L11.2 22.5 L10.9 16.4 L5.7 17.2 L6.8 15 L2.4 12.8 L6.2 11.7 L4.6 8.1 L8.6 9.2 L7.8 4.9 L10.4 6.4 Z';
+  const LEAVES = [[452, 268, 26, 0.9, -12], [690, 360, 34, 1, 18], [645, 690, 22, 0.8, 30], [640, 812, 24, 1, -8]];
+  const leafBox = document.getElementById('leaves');
+  LEAVES.forEach(([x, y, sz, a, r], i) => {
+    const color = i === 3 ? '#1d5e57' : '#f3ead8';
+    leafBox.insertAdjacentHTML('beforeend', `<svg class="abs leaf" viewBox="0 0 24 24" style="left:${x}px;top:${y}px;width:${sz}px;height:${sz}px;opacity:${a}"><path d="${LEAF}" fill="${color}"/></svg>`);
+  });
+  const leafEls = [...leafBox.children];
+
+  // Halftone Miami skyline: buildings make a darkness map, then a dot grid samples it.
+  let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const W = 720, H = 180;
+  const blds = [];
+  let x = 130;
+  const plan = [[60, 110], [40, 70], [70, 150], [55, 95], [45, 60], [62, 130], [38, 80], [80, 175], [50, 105], [66, 140], [44, 90]];
+  plan.forEach(([w, h0]) => { const h = h0 * 0.66; blds.push({ x, w, h, roof: rnd() > 0.6 }); x += w + 4 + rnd() * 8; });
+  const tall = blds.reduce((m, b) => b.h > m.h ? b : m); blds.push({ x: tall.x + tall.w / 2 - 4, w: 8, h: tall.h + 20, roof: false });
+  function dark(px, py) {
+    let d = 0;
+    if (py > H - 26 && px > 120) d = 0.75 + 0.2 * Math.sin(px * 0.13);
+    for (const b of blds) {
+      const top = H - b.h;
+      const roofCut = b.roof ? Math.max(0, 22 - Math.abs(px - (b.x + b.w / 2)) * 0.9) : 0;
+      if (px >= b.x && px <= b.x + b.w && py >= top - roofCut * 0 && py >= top + (b.roof ? 22 - roofCut : 0)) {
+        const shade = 0.55 + 0.4 * ((px - b.x) / b.w);
+        const win = (Math.floor((py - top) / 9) % 2 === 0 && Math.floor((px - b.x) / 8) % 2 === 0) ? -0.25 : 0;
+        d = Math.max(d, Math.min(1, shade + win));
+      }
+    }
+    return d;
+  }
+  const sky = document.getElementById('sky').getContext('2d');
+  const DOTS = [];
+  for (let py = 3; py < H; py += 6) for (let px = 3; px < W; px += 6) {
+    const d = dark(px, py) * (0.82 + 0.18 * rnd()); if (d > 0.05) DOTS.push([px, py, d]);
+  }
+  function drawSky(p) {
+    sky.setTransform(1.5, 0, 0, 1.5, 0, 0); sky.clearRect(0, 0, W, H); sky.fillStyle = '#161616';
+    const edge = 100 + p * 700;
+    for (const [px, py, d] of DOTS) {
+      if (px > edge) continue;
+      const k = Math.min(1, (edge - px) / 80);
+      sky.beginPath(); sky.arc(px, py, 3.1 * Math.sqrt(d) * k, 0, Math.PI * 2); sky.fill();
+    }
+  }
+
+  const clamp = v => Math.max(0, Math.min(1, v));
+  const prog = (t, a, b) => clamp((t - a) / (b - a));
+  const easeOut = p => 1 - Math.pow(1 - p, 3);
+  const easeInOut = p => p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+  const $ = id => document.getElementById(id);
+  const fade = (el, t, a, dy = 12) => { const p = easeOut(prog(t, a, a + 0.6)); el.style.opacity = p; el.style.transform = `translateY(${(1 - p) * dy}px)`; };
+  const ecgLen = $('ecgp').getTotalLength(); $('ecgp').style.strokeDasharray = ecgLen;
+
+  window.render = function (t) {
+    $('vline').style.transform = `scaleY(${easeInOut(prog(t, 0, 0.8))})`;
+    $('panel').style.transform = `scaleY(${easeInOut(prog(t, 0.1, 1.0))})`;
+    fade($('plus'), t, 0.8, -10);
+    [...$('title').querySelectorAll('i')].forEach((el, i) => { const p = easeOut(prog(t, 0.5 + i * 0.2, 1.1 + i * 0.2)); el.style.transform = `translateY(${(1 - p) * 105}%)`; });
+    fade($('where'), t, 1.2);
+    $('ecgp').style.strokeDashoffset = ecgLen * (1 - easeInOut(prog(t, 1.4, 2.2)));
+    fade($('edition'), t, 1.3);
+    fade($('hero'), t, 1.9);
+    drawSky(easeInOut(prog(t, 1.6, 3.4)));
+    ['r1', 'r2'].forEach((id, i) => $(id).style.transform = `scaleX(${easeInOut(prog(t, 2.6 + i * 0.2, 3.2 + i * 0.2))})`);
+    fade($('date'), t, 2.8); fade($('time'), t, 3.0);
+    const pc = easeOut(prog(t, 3.4, 3.9)); $('cta').style.opacity = pc; $('cta').style.transform = `scale(${0.92 + 0.08 * pc})`; $('cta').style.transformOrigin = 'left center';
+    fade($('ctanote'), t, 3.8); fade($('sticker'), t, 4.0, 0);
+    fade($('brand'), t, 4.2, 8); fade($('site'), t, 4.2, 8);
+    leafEls.forEach((el, i) => { const p = easeOut(prog(t, 1.0 + i * 0.3, 1.8 + i * 0.3));
+      el.style.opacity = p * LEAVES[i][3]; el.style.transform = `rotate(${LEAVES[i][4] + Math.sin(t * 0.9 + i) * 10}deg) translateY(${Math.sin(t * 0.7 + i * 2) * 4}px)`; });
+  };
+  window.render(params.has('t') ? +params.get('t') : 9);
+</script>
+</body>
+</html>

@@ -136,7 +136,7 @@
   const DAYS = {
     mon: () => {
       stage.className = 'light';
-      const items = ['Book your annual checkup', 'Drink more water than coffee', 'Move your body for 30 minutes',
+      const items = params.get('items') ? params.get('items').split('|') : ['Book your annual checkup', 'Drink more water than coffee', 'Move your body for 30 minutes',
                      'Reach out to one new connection', 'Save the date for Unwind Thursday'];
       return `
         <svg class="layer" width="720" height="1280"><defs>
@@ -309,7 +309,7 @@
     sun: () => {
       stage.className = 'dark';
       const week = [['MON', 'Your <em>To-Do List</em>'], ['TUE', 'Tech <em>Tuesday</em>'], ['WED', 'Wellness <em>Wednesday</em>'],
-                    ['THU', 'Unwind <em>Thursday</em>'], ['FRI', 'Founders <em>Friday</em>']];
+                    ['THU', params.get('thu') || 'Unwind <em>Thursday</em>'], ['FRI', 'Founders <em>Friday</em>']];
       return `
         <div id="stars" class="layer"></div>
         <div class="horizon" id="horizon"></div>
