@@ -1,4 +1,4 @@
-W1_01v2|W1_01_Mon_1116_1000_Weekly_Monday_To_Do|social/stories/weekly/weekly.html?day=mon&items=Get%20your%20ticket%20for%20Unwind%20Thursday%7CInvite%20one%20friend%20to%20come%20with%20you%7CDrink%20more%20water%20than%20coffee%7CMove%20your%20body%20for%2030%20minutes%7CReach%20out%20to%20one%20new%20connection
+W1_01v3|W1_01_Mon_1116_1300_Weekly_Monday_To_Do_LINK|social/stories/weekly/weekly.html?day=mon&items=Get%20your%20ticket%20for%20Unwind%20Thursday%7CInvite%20one%20friend%20to%20come%20with%20you%7CDrink%20more%20water%20than%20coffee%7CMove%20your%20body%20for%2030%20minutes%7CReach%20out%20to%20one%20new%20connection&tickets=1
 W1_03v2|W1_03_Tue_1117_1000_Weekly_Tech_Tuesday|social/stories/weekly/weekly.html?day=tue
 W1_04v2|W1_04_Tue_1117_1800_Event_All_Are_Welcome_LINK|social/stories/event-thanksgiving/event.html?v=friend&final=1
 W1_05v2|W1_05_Wed_1118_1000_Weekly_Wellness_Wednesday|social/stories/weekly/weekly.html?day=wed&quote=Do%20an%20honest%20self-inquiry.%20How%20are%20you%20feeling%20in%20life%3F%20How%20are%20you%20showing%20up%20in%20life%3F&by=DR.%20RUDY%20EBERWEIN%3Cbr%3E%40DRRUDYBESTLIFE

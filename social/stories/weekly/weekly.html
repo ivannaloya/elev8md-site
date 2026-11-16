@@ -153,7 +153,7 @@
         ${headline(['This Week’s', '<em>To-Do List</em>'], 290, 100)}
         <div class="todo">${items.map((t, i) => `<div class="item" data-a="slide" data-t="${1.6 + i * 0.18}">
           <span class="box"><i data-check="${3.0 + i * 0.35}"></i>${ICON.check}</span>${t}</div>`).join('')}</div>
-        ${cta(912, 'JOIN THE NETWORK', 'arrow', 'friendsofmed.com/portal')}
+        ${params.get('tickets') ? cta(912, 'GET YOUR TICKETS', 'down', 'For this Thursday. Tap the link below.') : cta(912, 'JOIN THE NETWORK', 'arrow', 'friendsofmed.com/portal')}
         ${footer()}`;
     },
     tue: () => {

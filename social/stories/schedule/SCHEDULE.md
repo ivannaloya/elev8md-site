@@ -7,7 +7,7 @@ link sticker added by hand: https://buytickets.at/friendsofmedicinellc/2104505/r
 
 | Date | Time | File | Link sticker |
 |---|---|---|---|
-| Mon 11/16 | 10:00 AM | W1_01 Weekly Monday To Do | |
+| Mon 11/16 | 1:00 PM | W1_01 Weekly Monday To Do | Ticket link |
 | Mon 11/16 | 6:00 PM | W1_02 Event 3 Days To Go | Ticket link |
 | Tue 11/17 | 10:00 AM | W1_03 Weekly Tech Tuesday | |
 | Tue 11/17 | 6:00 PM | W1_04 Event All Are Welcome | Ticket link |
