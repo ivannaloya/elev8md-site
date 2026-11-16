@@ -12,8 +12,11 @@ Every time Ivanna asks for weekly stories:
 4. Render animated videos only (no stills). Present them to Andre in the **swipe review page**
    (`social/stories/review/review.html`, published as an artifact with the `db` capability): one story at a time,
    Good to post / Needs changes, plus notes. The page carries the short plan and the reasoning, so Ivanna only
-   needs one line to send Andre with the link. Remind her to share the page with Andre so he can edit (answer) it.
-5. When Andre is done, read his answers from the page's `reviews` collection, then schedule every approved story in
+   needs one line to send Andre with the link.
+   **Two step review:** Ivanna reviews first. Apply her notes, republish to the same link (changed stories get a new
+   id, like `W1_08v2`, so old answers don't carry over), then remind her to share the page with Andre so he can
+   answer. A story is ready only when both have approved it.
+5. When Andre is done, read both answers from the page's `reviews` collection, then schedule every approved story in
    Metricool (Friends of Medicine brand, Instagram STORY, media from the public GitHub raw URL):
    no link sticker = autoPublish true; needs link = autoPublish false (Metricool pushes a reminder to her phone).
    Tell Ivanna which stories need changes and which she must post by hand.
