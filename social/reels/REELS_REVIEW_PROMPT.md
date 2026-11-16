@@ -19,8 +19,8 @@ sell or highlight? Maybe we should try exploring new ideas?"
   **Posts automatically** or **Needs a manual step** (trending audio, a TikTok sound, a link, a collab tag).
 - Under each video: the full **caption** with hashtags (tap to expand), the **hook** (first 3 seconds of on-screen
   text), the **song or audio**, and the length.
-- Two big buttons: **✓ Good to post** and **✕ Needs changes**. Swipe right or left on the video does the same;
-  arrow keys on a computer.
+- Two big buttons: **✓ Good to post** and **✕ Needs changes**, plus arrow keys on a computer. No swipe gestures:
+  they're too easy to trigger by accident.
 - A **Notes** box that saves on its own as you type, plus an **Add timestamp** button that drops the current playback
   time into the notes, like `[0:12] cut this pause`, so feedback points to an exact moment.
 - An optional **Caption edit** box for rewriting the caption directly.

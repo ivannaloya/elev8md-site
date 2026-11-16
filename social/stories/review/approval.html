@@ -43,7 +43,7 @@
   .changed b { color: var(--teal); font-size: 11px; letter-spacing: 0.12em; margin-right: 6px; }
 
   .card { position: relative; width: 100%; max-height: 62vh; aspect-ratio: 9 / 16; margin: 0 auto; border-radius: 18px; overflow: hidden;
-          background: #000; touch-action: pan-y; user-select: none; transition: transform 0.25s ease; max-width: 100%; }
+          background: #000; transition: transform 0.25s ease; max-width: 100%; }
   .card video { width: 100%; height: 100%; object-fit: contain; display: block; background: #000; }
   .stamp { position: absolute; top: 18px; padding: 6px 14px; border: 3px solid; border-radius: 10px; font-weight: 700; font-size: 22px;
            letter-spacing: 0.12em; opacity: 0; pointer-events: none; }
@@ -115,7 +115,6 @@
       <button class="btn-no" id="no">✕ Needs changes</button>
       <button class="btn-yes" id="yes">✓ Good to post</button>
     </div>
-    <div class="hint" style="margin-top:8px">Swipe the story right for yes, left for changes.</div>
   </section>
 
   <section id="sum" class="sum" hidden>
@@ -265,22 +264,6 @@
     if (e.key === 'ArrowRight') decide('yes');
     if (e.key === 'ArrowLeft') decide('no');
   });
-
-  // Swipe: drag the story sideways; past 90px decides.
-  let sx = null;
-  $('card').addEventListener('pointerdown', e => { sx = e.clientX; });
-  $('card').addEventListener('pointermove', e => {
-    if (sx === null) return; const dx = e.clientX - sx;
-    $('card').style.transition = 'none'; $('card').style.transform = `translateX(${dx}px) rotate(${dx / 25}deg)`;
-    $('sy').style.opacity = Math.max(0, dx / 90); $('sn').style.opacity = Math.max(0, -dx / 90);
-  });
-  const endSwipe = e => {
-    if (sx === null) return; const dx = e.clientX - sx; sx = null; $('card').style.transition = '';
-    if (dx > 90) decide('yes'); else if (dx < -90) decide('no');
-    else { $('card').style.transform = ''; $('sy').style.opacity = 0; $('sn').style.opacity = 0; }
-  };
-  $('card').addEventListener('pointerup', endSwipe);
-  $('card').addEventListener('pointercancel', endSwipe);
 
   render();
 
