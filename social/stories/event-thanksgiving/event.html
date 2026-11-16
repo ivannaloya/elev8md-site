@@ -117,6 +117,9 @@
              info: [['BRING', 'Your work ID (hospital badge or license)'], ['DRESS', 'Smart casual to cocktail'],
                     ['INCLUDED', 'Free access to the FOM Portal'], ['BAR', 'Pay as you go, by the venue']],
              date: 'THURSDAY, NOVEMBER 19', time: '7:30 TO 10:30 PM', cta: `LAST TICKETS ${DOWN}`, note: 'Tap the link below.', link: true },
+    // Reel end card: no link stickers on Reels, so it points to the link in bio.
+    limited: { reel: true, hero: `<div class="big">LIMITED<br><em>TICKETS.</em></div><div class="note">Don\u2019t wait. Spots are going fast.</div>`,
+             date: 'THIS THURSDAY, NOV 19', time: '7:30 TO 10:30 PM', cta: `GET YOURS \u00B7 LINK IN BIO`, note: 'friendsofmed.com', link: false },
     thanks: { inv: true, hero: `<div class="big">THANK YOU,<br><em>MIAMI.</em></div><div class="note">For a night full of good company, new friends and real conversations.</div>`,
              date: 'SEE YOU AT THE NEXT ONE', time: 'JOIN THE NETWORK AT FRIENDSOFMED.COM/PORTAL', cta: `JOIN THE PORTAL ${ARROW}`, note: 'friendsofmed.com/portal', link: false },
   };
@@ -129,6 +132,8 @@
   document.getElementById('sticker').style.display = S.link && !params.has('final') ? 'block' : 'none';
   if (V === 'thanks') document.getElementById('time').style.fontSize = '15px';
   if (S.inv) document.getElementById('stage').classList.add('inv');
+  // Reels cover the bottom fifth and the right edge with captions and buttons: drop the corner badge, lift the name.
+  if (S.reel) { document.getElementById('site').style.display = 'none'; document.getElementById('brand').style.top = '978px'; document.getElementById('ctanote').style.display = 'none'; }
   if (S.info) {
     const info = document.getElementById('info'); info.style.display = 'block'; document.getElementById('sky').style.display = 'none';
     // The details push the date and button down a little.
