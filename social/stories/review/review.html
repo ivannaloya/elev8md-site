@@ -278,8 +278,11 @@
     db.collection('reviews').onSnapshot(snap => {
       if (!snap.metadata.fromCache) { clearTimeout(timer); setNotice(''); }
       all = snap.docs.map(x => x.data()).filter(Boolean);
+      // Rebuild your answers from what is saved, so a cleared answer clears here too.
+      const typingId = document.activeElement === $('comment') ? STORIES[idx]?.id : null;
+      Object.keys(mine).forEach(k => { if (k !== typingId) delete mine[k]; });
       all.filter(r => r.uid === uid).forEach(r => {
-        if (STORIES[idx]?.id === r.story && document.activeElement === $('comment')) return;
+        if (r.story === typingId) return;
         mine[r.story] = { decision: r.decision, comment: r.comment };
       });
       render();
