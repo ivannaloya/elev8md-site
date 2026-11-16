@@ -39,6 +39,8 @@
   .tags { display: flex; gap: 6px; flex-wrap: wrap; }
   .tag { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; padding: 4px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
   .tag.link { border-color: var(--gold); color: var(--gold); }
+  .changed { font-size: 13px; line-height: 1.45; color: var(--fg); background: var(--surface); border-left: 3px solid var(--teal); padding: 8px 10px; border-radius: 6px; }
+  .changed b { color: var(--teal); font-size: 11px; letter-spacing: 0.12em; margin-right: 6px; }
 
   .card { position: relative; width: 100%; max-height: 62vh; aspect-ratio: 9 / 16; margin: 0 auto; border-radius: 18px; overflow: hidden;
           background: #000; touch-action: pan-y; user-select: none; transition: transform 0.25s ease; max-width: 100%; }
@@ -81,7 +83,7 @@
   <header><h1>Story <em>Review</em></h1><span class="count" id="count">0 OF 23 REVIEWED</span></header>
 
   <details class="plan" id="plan">
-    <summary>THE PLAN, NOV 16 TO 29</summary>
+    <summary>THE PLAN, NOV 16 TO 29 (ROUND 2)</summary>
     <p><b>This week</b> builds to Unwind Thursday at Giselle (Nov 19): weekly stories at <b>10 AM</b>, ticket reminders at <b>6 PM</b>, "Today's the day" Thursday morning and a thank you Friday.</p>
     <p><b>Next week</b> is Thanksgiving: weekly stories at 10 AM, holiday stories at 6 PM, Happy Thanksgiving on Thursday.</p>
     <p>Why these times: our followers are most active around 10 AM and 6 PM, so content lands when people are scrolling and ticket pushes land when they make evening plans.</p>
@@ -95,6 +97,7 @@
       <div class="when" id="when"></div>
       <div class="title" id="title"></div>
       <div class="tags" id="tags"></div>
+      <div class="changed" id="changed" hidden></div>
     </div>
     <div class="card" id="card" style="margin-top:12px">
       <video id="vid" muted loop playsinline autoplay preload="auto"></video>
@@ -125,30 +128,30 @@
 <script>
   // The stories under review. file = published video path; link = needs a ticket link sticker, posted by hand.
   const STORIES = [
-    ['W1_01', 'MON NOV 16 · 10:00 AM', 'Monday To-Do List', 'Weekly', 0],
-    ['W1_02', 'MON NOV 16 · 6:00 PM', '3 Days To Go', 'Event', 1],
-    ['W1_03', 'TUE NOV 17 · 10:00 AM', 'Tech Tuesday', 'Weekly', 0],
-    ['W1_04', 'TUE NOV 17 · 6:00 PM', 'Bring A Friend', 'Event', 1],
-    ['W1_05', 'WED NOV 18 · 10:00 AM', 'Wellness Wednesday', 'Weekly', 0],
-    ['W1_06', 'WED NOV 18 · 6:00 PM', 'Tomorrow Night, Last Call', 'Event', 1],
-    ['W1_07', 'THU NOV 19 · 10:00 AM', 'Today’s The Day', 'Event', 1],
-    ['W1_08', 'THU NOV 19 · 5:00 PM', 'See You Tonight', 'Event', 1],
-    ['W1_09', 'FRI NOV 20 · 10:00 AM', 'Thank You, Miami', 'Event', 0],
-    ['W1_10', 'FRI NOV 20 · 1:00 PM', 'Founders Friday', 'Weekly', 0],
-    ['W1_11', 'SAT NOV 21 · 10:00 AM', 'Your Weekend Prescription', 'Weekly', 0],
-    ['W1_12', 'SUN NOV 22 · 6:00 PM', 'Sunday Reset', 'Weekly', 0],
-    ['W2_01', 'MON NOV 23 · 10:00 AM', 'Monday To-Do List', 'Weekly', 0],
-    ['W2_02', 'MON NOV 23 · 6:00 PM', 'Check On Your Doctor Friends', 'Holiday', 0],
-    ['W2_03', 'TUE NOV 24 · 10:00 AM', 'Tech Tuesday', 'Weekly', 0],
-    ['W2_04', 'TUE NOV 24 · 6:00 PM', 'A Seat At Your Table', 'Holiday', 0],
-    ['W2_05', 'WED NOV 25 · 10:00 AM', 'Wellness Wednesday', 'Weekly', 0],
-    ['W2_06', 'WED NOV 25 · 6:00 PM', 'Gratitude Grows When It’s Shared', 'Holiday', 0],
-    ['W2_07', 'THU NOV 26 · 10:00 AM', 'Happy Thanksgiving', 'Holiday', 0],
-    ['W2_08', 'FRI NOV 27 · 10:00 AM', 'Success Is Meant To Be Shared', 'Holiday', 0],
-    ['W2_09', 'FRI NOV 27 · 1:00 PM', 'Founders Friday', 'Weekly', 0],
-    ['W2_10', 'SAT NOV 28 · 10:00 AM', 'Your Weekend Prescription', 'Weekly', 0],
-    ['W2_11', 'SUN NOV 29 · 6:00 PM', 'Sunday Reset', 'Weekly', 0],
-  ].map(([id, when, title, kind, link]) => ({ id, when, title, kind, link: !!link, file: `v/${id}.mp4` }));
+    ['W1_01v2', 'MON NOV 16 · 10:00 AM', 'Monday To-Do List', 'Weekly', 0, 'Footer on one line.'],
+    ['W1_02', 'MON NOV 16 · 6:00 PM', '3 Days To Go', 'Event', 1, ''],
+    ['W1_03v2', 'TUE NOV 17 · 10:00 AM', 'Tech Tuesday', 'Weekly', 0, 'Footer on one line.'],
+    ['W1_04v2', 'TUE NOV 17 · 6:00 PM', 'All Are Welcome', 'Event', 1, 'Now "All are welcome. Founders, medical professionals and leaders."'],
+    ['W1_05v2', 'WED NOV 18 · 10:00 AM', 'Wellness Wednesday', 'Weekly', 0, 'Footer on one line.'],
+    ['W1_06', 'WED NOV 18 · 6:00 PM', 'Tomorrow Night, Last Call', 'Event', 1, ''],
+    ['W1_07', 'THU NOV 19 · 10:00 AM', 'Today\u2019s The Day', 'Event', 1, ''],
+    ['W1_08v2', 'THU NOV 19 · 5:00 PM', 'See You At 7:30 PM', 'Event', 1, 'New headline, plus Good to know: work ID, dress code, Portal included, bar.'],
+    ['W1_09v2', 'FRI NOV 20 · 10:00 AM', 'Thank You, Miami', 'Event', 0, 'Inverted: black background, light text.'],
+    ['W1_10v2', 'FRI NOV 20 · 1:00 PM', 'Founders Friday', 'Weekly', 0, 'New quote. "Lowest point" is saved for the Nov 25 Reel. More space under the title.'],
+    ['W1_11v2', 'SAT NOV 21 · 10:00 AM', 'Your Weekend Prescription', 'Weekly', 0, 'Footer on one line.'],
+    ['W1_12v2', 'SUN NOV 22 · 6:00 PM', 'Sunday Reset', 'Weekly', 0, 'Warm amber candlelight instead of teal. Footer on one line.'],
+    ['W2_01v2', 'MON NOV 23 · 10:00 AM', 'Monday To-Do List', 'Weekly', 0, 'Thanksgiving week label; "Save someone a seat at your table" is first.'],
+    ['W2_02v2', 'MON NOV 23 · 6:00 PM', 'Check On Your Doctor Friends', 'Holiday', 0, 'Footer on one line.'],
+    ['W2_03v2', 'TUE NOV 24 · 10:00 AM', 'Tech Tuesday', 'Weekly', 0, 'New: a real quote from Dr. Eric Topol (Deep Medicine). Footer on one line.'],
+    ['W2_04v2', 'TUE NOV 24 · 6:00 PM', 'A Seat At Your Table', 'Holiday', 0, 'Footer on one line.'],
+    ['W2_05v2', 'WED NOV 25 · 10:00 AM', 'Wellness Wednesday', 'Weekly', 0, 'Footer on one line.'],
+    ['W2_06v2', 'WED NOV 25 · 6:00 PM', 'Gratitude Grows When It\u2019s Shared', 'Holiday', 0, 'Footer on one line.'],
+    ['W2_07v2', 'THU NOV 26 · 10:00 AM', 'Happy Thanksgiving', 'Holiday', 0, 'Footer on one line.'],
+    ['W2_08v2', 'FRI NOV 27 · 10:00 AM', 'Success Is Meant To Be Shared', 'Holiday', 0, 'Footer on one line.'],
+    ['W2_09v2', 'FRI NOV 27 · 1:00 PM', 'Founders Friday', 'Weekly', 0, 'More space between the title and the quote. Footer on one line.'],
+    ['W2_10v2', 'SAT NOV 28 · 10:00 AM', 'Your Weekend Prescription', 'Weekly', 0, 'New items, cut to 3 lines.'],
+    ['W2_11v2', 'SUN NOV 29 · 6:00 PM', 'Rest Is Part Of The Work', 'Weekly', 0, 'New Sunday idea, warm amber look, 3 slow rituals.'],
+  ].map(([id, when, title, kind, link, changed]) => ({ id, when, title, kind, link: !!link, changed, file: `v/${id}.mp4` }));
 
   const $ = id => document.getElementById(id);
   let idx = 0;
@@ -176,6 +179,9 @@
     $('title').textContent = s.title;
     $('tags').innerHTML = `<span class="tag">${s.kind.toUpperCase()}</span>` + (s.link ? '<span class="tag link">NEEDS TICKET LINK · POSTED BY HAND</span>' : '<span class="tag">POSTS AUTOMATICALLY</span>');
     if ($('vid').getAttribute('src') !== s.file) { $('vid').setAttribute('src', s.file); $('vid').play().catch(() => {}); }
+    $('changed').hidden = !s.changed;
+    $('changed').innerHTML = s.changed ? '<b>WHAT CHANGED</b>' : '';
+    if (s.changed) $('changed').append(document.createTextNode(s.changed));
     if (document.activeElement !== $('comment')) $('comment').value = mine[s.id]?.comment || '';
     const d = mine[s.id]?.decision;
     $('no').classList.toggle('on', d === 'no');

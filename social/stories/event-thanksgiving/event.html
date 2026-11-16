@@ -11,6 +11,9 @@
   html, body { margin: 0; padding: 0; background: #000; }
   #stage { position: relative; width: 720px; height: 1280px; overflow: hidden; background: var(--paper); color: var(--ink);
            font-family: 'Montserrat'; }
+  .inv { --paper: #111312; --ink: #f3ead8; }
+  .inv #grain { mix-blend-mode: screen; opacity: 0.12; }
+  .inv #hero .big em, .inv #hero .note, .inv #ctanote, .inv #brand span { color: #5cc4b4; }
   #grain { position: absolute; inset: 0; opacity: 0.35; mix-blend-mode: multiply; pointer-events: none; }
 
   .abs { position: absolute; }
@@ -38,6 +41,10 @@
   #hero .note { margin-top: 10px; font-family: 'Playfair'; font-style: italic; font-size: 20px; line-height: 1.25; color: var(--teal); }
 
   #sky { left: 0; top: 610px; }
+  #info { left: 52px; top: 648px; width: 616px; display: none; }
+  #info .h { font-weight: 800; font-size: 14px; letter-spacing: 0.2em; color: var(--teal); padding-bottom: 6px; border-bottom: 2px solid var(--ink); }
+  #info .r { display: flex; gap: 12px; align-items: baseline; padding: 5px 0; border-bottom: 1px solid rgba(22,22,22,0.18); font-weight: 600; font-size: 17px; }
+  #info .r span { font-weight: 800; font-size: 12px; letter-spacing: 0.14em; color: var(--teal); width: 92px; flex: none; }
 
   .rule { left: 52px; width: 290px; height: 2px; background: var(--ink); transform-origin: left; }
   #date { left: 52px; top: 795px; font-weight: 800; font-size: 31px; letter-spacing: 0.01em; }
@@ -68,11 +75,12 @@
 
   <div id="title" class="abs"><span><i>UNWIND</i></span><span><i>THURSDAY</i></span></div>
   <div id="where" class="abs">AT GISELLE, MIAMI</div>
-  <svg id="ecg" class="abs" width="300" height="40"><path id="ecgp" d="M0 26 H150 L158 20 L166 34 L176 0 L186 40 L194 22 L202 26 H300" fill="none" stroke="#161616" stroke-width="2"/></svg>
+  <svg id="ecg" class="abs" width="300" height="40"><path id="ecgp" d="M0 26 H150 L158 20 L166 34 L176 0 L186 40 L194 22 L202 26 H300" fill="none" style="stroke: var(--ink)" stroke-width="2"/></svg>
 
   <div id="edition" class="abs"><div class="t">Thanksgiving<br>Edition</div><div class="s">A HARVEST OF GOOD COMPANY</div></div>
   <div id="hero" class="abs"></div>
 
+  <div id="info" class="abs"></div>
   <canvas id="sky" class="abs" width="1080" height="270" style="width:720px;height:180px;top:590px"></canvas>
 
   <div class="rule abs" id="r1" style="top:780px"></div>
@@ -99,15 +107,17 @@
     days3: { hero: `<div style="display:flex;align-items:flex-end;gap:14px"><div class="num">3</div><div class="lbl">DAYS<br>TO GO</div></div>
                     <div class="note">Step away. Slow down. Show up.</div>`,
              date: 'THIS THURSDAY, NOV 19', time: '7:30 TO 10:30 PM', cta: `GET YOUR TICKETS ${DOWN}`, note: 'Tap the link below.', link: true },
-    friend: { hero: `<div class="big">BRING<br><em>A FRIEND.</em></div><div class="note">Come alone or bring your plus one. We’ll introduce you.</div>`,
-             date: 'THURSDAY, NOVEMBER 19', time: '7:30 TO 10:30 PM', cta: `GET TWO TICKETS ${DOWN}`, note: 'Tap the link below.', link: true },
+    friend: { hero: `<div class="big">ALL ARE<br><em>WELCOME.</em></div><div class="note">Founders, medical professionals and leaders. Bring a friend.</div>`,
+             date: 'THURSDAY, NOVEMBER 19', time: '7:30 TO 10:30 PM', cta: `GET YOUR TICKETS ${DOWN}`, note: 'Tap the link below.', link: true },
     tomorrow: { hero: `<div class="big">TOMORROW<br><em>NIGHT.</em></div><div class="note">Last call for tickets. Spots are limited.</div>`,
              date: 'THURSDAY, NOVEMBER 19', time: '7:30 TO 10:30 PM', cta: `GRAB YOUR SPOT ${DOWN}`, note: 'Tap the link below.', link: true },
     today: { hero: `<div class="big">TODAY’S<br><em>THE DAY.</em></div><div class="note">Join us tonight for a harvest of good company.</div>`,
              date: 'TONIGHT, NOVEMBER 19', time: '7:30 TO 10:30 PM', cta: `JOIN US TONIGHT ${DOWN}`, note: 'Last tickets at the link below.', link: true },
-    tonight: { hero: `<div class="big">SEE YOU<br><em>TONIGHT.</em></div><div class="note">Doors open at 7:30. Come as you are.</div>`,
-             date: 'GISELLE, MIAMI', time: '7:30 TO 10:30 PM', cta: `TICKETS AT THE DOOR ${DOWN}`, note: 'Or tap the link below.', link: true },
-    thanks: { hero: `<div class="big">THANK YOU,<br><em>MIAMI.</em></div><div class="note">For a night full of good company, new friends and real conversations.</div>`,
+    tonight: { hero: `<div class="big">SEE YOU<br><em>AT 7:30 PM.</em></div>`,
+             info: [['BRING', 'Your work ID (hospital badge or license)'], ['DRESS', 'Smart casual to cocktail'],
+                    ['INCLUDED', 'Free access to the FOM Portal'], ['BAR', 'Pay as you go, by the venue']],
+             date: 'THURSDAY, NOVEMBER 19', time: '7:30 TO 10:30 PM', cta: `LAST TICKETS ${DOWN}`, note: 'Tap the link below.', link: true },
+    thanks: { inv: true, hero: `<div class="big">THANK YOU,<br><em>MIAMI.</em></div><div class="note">For a night full of good company, new friends and real conversations.</div>`,
              date: 'SEE YOU AT THE NEXT ONE', time: 'JOIN THE NETWORK AT FRIENDSOFMED.COM/PORTAL', cta: `JOIN THE PORTAL ${ARROW}`, note: 'friendsofmed.com/portal', link: false },
   };
   const S = STORIES[V];
@@ -118,6 +128,13 @@
   document.getElementById('ctanote').textContent = S.note;
   document.getElementById('sticker').style.display = S.link && !params.has('final') ? 'block' : 'none';
   if (V === 'thanks') document.getElementById('time').style.fontSize = '15px';
+  if (S.inv) document.getElementById('stage').classList.add('inv');
+  if (S.info) {
+    const info = document.getElementById('info'); info.style.display = 'block'; document.getElementById('sky').style.display = 'none';
+    // The details push the date and button down a little.
+    [['r1', 808], ['date', 822], ['time', 864], ['r2', 902], ['cta', 918], ['ctanote', 982]].forEach(([id, y]) => document.getElementById(id).style.top = y + 'px');
+    info.innerHTML = '<div class="h">GOOD TO KNOW</div>' + S.info.map(([k, v]) => `<div class="r"><span>${k}</span>${v}</div>`).join('');
+  }
 
   // Maple leaves, like the flyer: a few on the teal panel, one by the date.
   const LEAF = 'M12 1.5 L13.6 6.4 L16.2 4.9 L15.4 9.2 L19.4 8.1 L17.8 11.7 L21.6 12.8 L17.2 15 L18.3 17.2 L13.1 16.4 L12.8 22.5 L11.2 22.5 L10.9 16.4 L5.7 17.2 L6.8 15 L2.4 12.8 L6.2 11.7 L4.6 8.1 L8.6 9.2 L7.8 4.9 L10.4 6.4 Z';
@@ -157,7 +174,7 @@
     const d = dark(px, py) * (0.82 + 0.18 * rnd()); if (d > 0.05) DOTS.push([px, py, d]);
   }
   function drawSky(p) {
-    sky.setTransform(1.5, 0, 0, 1.5, 0, 0); sky.clearRect(0, 0, W, H); sky.fillStyle = '#161616';
+    sky.setTransform(1.5, 0, 0, 1.5, 0, 0); sky.clearRect(0, 0, W, H); sky.fillStyle = getComputedStyle($('stage')).getPropertyValue('--ink').trim() || '#161616';
     const edge = 100 + p * 700;
     for (const [px, py, d] of DOTS) {
       if (px > edge) continue;
@@ -182,7 +199,7 @@
     fade($('where'), t, 1.2);
     $('ecgp').style.strokeDashoffset = ecgLen * (1 - easeInOut(prog(t, 1.4, 2.2)));
     fade($('edition'), t, 1.3);
-    fade($('hero'), t, 1.9);
+    fade($('hero'), t, 1.9); fade($('info'), t, 2.3);
     drawSky(easeInOut(prog(t, 1.6, 3.4)));
     ['r1', 'r2'].forEach((id, i) => $(id).style.transform = `scaleX(${easeInOut(prog(t, 2.6 + i * 0.2, 3.2 + i * 0.2))})`);
     fade($('date'), t, 2.8); fade($('time'), t, 3.0);
