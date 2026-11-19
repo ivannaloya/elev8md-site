@@ -131,7 +131,7 @@
   document.getElementById('ctanote').textContent = S.note;
   document.getElementById('sticker').style.display = S.link && !params.has('final') ? 'block' : 'none';
   if (V === 'thanks') document.getElementById('time').style.fontSize = '15px';
-  if (S.inv) document.getElementById('stage').classList.add('inv');
+  if (S.inv || params.has('inv')) document.getElementById('stage').classList.add('inv');
   // Reels cover the bottom fifth and the right edge with captions and buttons: drop the corner badge, lift the name.
   if (S.reel) { document.getElementById('site').style.display = 'none'; document.getElementById('brand').style.top = '978px'; document.getElementById('ctanote').style.display = 'none'; }
   if (S.info) {
