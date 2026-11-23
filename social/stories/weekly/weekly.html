@@ -106,6 +106,7 @@
   .bubble { position: absolute; right: 67px; max-width: 380px; padding: 14px 20px; border-radius: 24px 24px 6px 24px;
             background: var(--teal); color: var(--cream); font-family: 'Inter'; font-size: 19px; line-height: 27px; box-shadow: 0 10px 30px rgba(10,21,19,0.15); }
   .delivered { position: absolute; right: 72px; font-family: 'Inter'; font-size: 12px; color: rgba(10,21,19,0.5); }
+  .dark .delivered { color: rgba(239,230,213,0.5); }
   .elevens { position: absolute; right: 67px; top: 790px; font-family: 'Cormorant'; font-weight: 500; font-size: 120px; line-height: 1;
              color: transparent; -webkit-text-stroke: 1.5px rgba(224,168,90,0.45); letter-spacing: -0.02em; }
   .dark .gold, .gold { color: var(--gold); }
@@ -349,6 +350,8 @@
     },
   };
   stage.innerHTML = DAYS[DAY]();
+  // ?inv flips a cream story onto the black background.
+  if (params.has('inv')) stage.className = 'dark';
 
   // Deterministic random so every render of a frame matches.
   let seed = 7;
