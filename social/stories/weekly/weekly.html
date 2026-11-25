@@ -449,7 +449,14 @@
     let y = q.offsetTop + q.offsetHeight + 18;
     stage.querySelector('.rule').style.top = `${y}px`; y += 20;
     const a = stage.querySelector('.attrib'); a.style.top = `${y}px`; y += a.offsetHeight + 32;
-    const pl = stage.querySelector('.pillars'); if (pl) pl.style.top = `${y}px`;
+    const pl = stage.querySelector('.pillars');
+    if (pl) {
+      pl.style.top = `${y}px`;
+      pl.style.display = '';
+      // A long quote leaves no room for the pillar list above the button: drop the list.
+      const cta = stage.querySelector('.cta');
+      pl.style.display = cta && y + pl.offsetHeight > cta.offsetTop - 24 ? 'none' : '';
+    }
   }
 
   window.render = function (t) {
