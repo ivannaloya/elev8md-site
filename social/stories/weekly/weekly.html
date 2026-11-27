@@ -457,6 +457,20 @@
         ${cta(955, 'ANSWER BELOW', 'down', 'We’ll share a few next week.')}
         ${footer()}`;
     },
+    // Quote first, then the speaker is revealed halfway through.
+    whosaid: () => {
+      stage.className = 'dark';
+      return `
+        <div id="bokeh" class="layer"></div>
+        ${topRow('WHO SAID THAT?')}
+        ${headline(['Who said', '<em>that?</em>'], 280, 110)}
+        <div class="quote" style="top:530px;width:580px;font-size:34px;line-height:41px" data-a="fade" data-t="1.5">\u201CIf you experience success, you should be able to share that with others and it all comes back to you.\u201D</div>
+        <div class="caps" style="position:absolute;left:67px;top:735px;color:var(--gold)" data-a="fade" data-t="4.6">IT WAS\u2026</div>
+        <div class="sub" style="top:765px;font-size:46px;line-height:50px;font-style:normal" data-a="pop" data-t="5.2">Dr. Andr\u00E9 Coombs</div>
+        <div class="caps" style="position:absolute;left:67px;top:830px;color:var(--glow)" data-a="fade" data-t="5.6">FOUNDER, FRIENDS OF MEDICINE</div>
+        ${cta(955, 'SHARE IT FORWARD', 'arrow', 'Send this to someone who lifts others up.')}
+        ${footer()}`;
+    },
     sunrest: () => {
       stage.className = 'dark warm';
       const items = ['Make a breakfast worth sitting down for.', 'Put one fun thing on this week\u2019s calendar.', 'Text someone you\u2019re grateful for.'];
@@ -598,7 +612,7 @@
   const animated = [...document.querySelectorAll('[data-a]')];
   // The rule, attribution and pillars sit under the quote, however many lines it runs.
   function layoutQuote() {
-    const q = stage.querySelector('.quote'); if (!q) return;
+    const q = stage.querySelector('.quote'); if (!q || !stage.querySelector('.rule')) return;
     let y = q.offsetTop + q.offsetHeight + 18;
     stage.querySelector('.rule').style.top = `${y}px`; y += 20;
     const a = stage.querySelector('.attrib'); a.style.top = `${y}px`; y += a.offsetHeight + 32;
