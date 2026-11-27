@@ -101,6 +101,7 @@
   .nlist .row { display: flex; align-items: baseline; height: 50px; line-height: 50px; border-bottom: 1px solid rgba(10,21,19,0.14);
                 font-family: 'Cormorant'; font-weight: 500; font-size: 29px; white-space: nowrap; }
   .dark .nlist .row { border-bottom-color: rgba(239,230,213,0.12); }
+  .nlist .row i { font-family: 'Inter'; font-style: normal; font-size: 13px; letter-spacing: 0.04em; opacity: 0.6; margin-left: 10px; }
   .nlist .num { flex: none; width: 44px; font-family: 'Inter'; font-weight: 600; font-size: 12px; letter-spacing: 0.1em; color: var(--teal); }
   .dark .nlist .num { color: var(--gold); }
   .bubble { position: absolute; right: 67px; max-width: 380px; padding: 14px 20px; border-radius: 24px 24px 6px 24px;
@@ -115,6 +116,9 @@
   .night .kicker, .night .headline em, .night .cta .note { color: var(--gold); }
   .night .pill { border: 1.5px solid var(--gold); color: var(--cream); box-shadow: 0 0 24px rgba(224,168,90,0.22); }
   .night .footer { color: var(--cream); }
+  .night.pink { --gold: #ff2e93; }
+  .night.pink .pill { box-shadow: 0 0 26px rgba(255,46,147,0.35); }
+  .night.pink .details .r { border-bottom-color: rgba(255,46,147,0.25); }
   .details { position: absolute; left: 67px; width: 586px; }
   .details .r { display: flex; align-items: baseline; gap: 14px; padding: 9px 0; border-bottom: 1px solid rgba(224,168,90,0.22); }
   .details .r span:first-child { flex: none; width: 76px; font-family: 'Inter'; font-weight: 600; font-size: 11px; letter-spacing: 0.22em; color: var(--gold); }
@@ -360,34 +364,42 @@
     // ===== Week of Nov 30, 2026: Miami Art Week and Under the Stars (Dec 2) =====
     glance: () => {
       stage.className = 'light';
-      const days = [['MON', 'Week at a glance'], ['TUE', 'Tech Tuesday: This or That'], ['WED', 'Under the Stars <i>Basel Edition</i>', 1],
-                    ['THU', 'Who’s in the room'], ['FRI', 'Founders Friday'], ['SAT', 'Your Art Week weekend'], ['SUN', 'One thing you’re grateful for']];
+      const days = [['MON', 'Miami Art Week begins'], ['TUE', 'Art Miami + Design Miami open'], ['WED', 'Under the Stars <i>Basel Edition</i>', 1],
+                    ['THU', 'Art Basel preview days'], ['FRI', 'Art Basel opens to the public'], ['SAT', 'Untitled Art on Ocean Drive'], ['SUN', 'Art Basel closing day']];
       return `
         ${topRow('MIAMI ART WEEK')}
         ${headline(['Your week', '<em>at a glance</em>'], 290, 92)}
         <div class="cal" style="top:500px">${days.map(([d, t, hl], i) => `<div class="d${hl ? ' hl' : ''}" data-a="slide" data-t="${1.4 + i * 0.16}"><b>${d}</b><span>${t}</span></div>`).join('')}</div>
-        ${cta(955, 'SAVE THE DATE: DEC 2', 'arrow', 'Under the Stars. Link in bio to RSVP.')}
+        ${cta(955, 'SAVE THE DATE: DEC 2', 'arrow', 'Under the Stars. RSVP by DM.')}
         ${footer()}`;
     },
     stars: () => {
-      stage.className = 'night';
+      stage.className = 'night pink';
       const v = params.get('v') || 'invite';
       const hero = { invite: 'YOU’RE INVITED', tomorrow: 'TOMORROW NIGHT', tonight: 'TONIGHT', thanks: 'THANK YOU' }[v];
-      const rows = v === 'thanks'
-        ? [['WHEN', 'Wednesday, Dec 2'], ['WHERE', 'National Hotel, Miami Beach'], ['FOR', 'St. Jude Children’s Research Hospital']]
-        : [['DATE', 'Wednesday, Dec 2'], ['TIME', '7 PM to 1 AM'], ['PLACE', 'National Hotel, Miami Beach'], ['MUSIC', 'UZO + Dayah Modo'], ['CAUSE', 'St. Jude Children’s Research Hospital']];
-      const sub = v === 'thanks' ? 'For a night of art, music and connection, for a cause close to our hearts.'
-                                 : 'Basel Edition, presented by Nolcha Shows. Friends of Medicine is an official partner.';
+      const full = [['DATE', 'Wednesday, Dec 2'], ['TIME', '7 PM to 1 AM'], ['PLACE', 'National Hotel, Miami Beach'], ['MUSIC', 'UZO + Dayah Modo'], ['CAUSE', 'St. Jude Children’s Research Hospital']];
+      const short = [['WHEN', 'Tonight, 7 PM to 1 AM'], ['WHERE', 'National Hotel, Miami Beach'], ['FOR', 'St. Jude Children’s Research Hospital']];
+      const past = [['WHEN', 'Wednesday, Dec 2'], ['WHERE', 'National Hotel, Miami Beach'], ['FOR', 'St. Jude Children’s Research Hospital']];
+      const copy = {
+        invite:   { head: ['Under the', '<em>Stars</em>'], sub: 'Basel Edition, presented by Nolcha Shows. Friends of Medicine is an official partner.', rows: full,
+                    cta: cta(955, 'RSVP BY DM', 'arrow') },
+        tomorrow: { head: ['Under the', '<em>Stars</em>'], sub: 'Basel Edition, presented by Nolcha Shows. Friends of Medicine is an official partner.', rows: full,
+                    cta: cta(955, 'RSVP BY DM', 'arrow', 'Your last chance to join us.') },
+        tonight:  { head: ['Tonight we', '<em>come together</em>'], sub: 'Under the Stars, Basel Edition. We’re very grateful to be partnering with Nolcha Shows on this, and we’d love to see you there.', rows: short,
+                    cta: cta(955, 'RSVP BY DM', 'arrow', 'See you tonight.') },
+        thanks:   { head: ['Under the', '<em>Stars</em>'], sub: 'Thank you for joining us. It was a very special night.', rows: past,
+                    cta: cta(955, 'RECAP COMING FRIDAY', 'arrow', 'Watch how the night went this Founders Friday.') },
+      }[v];
+      const two = v === 'tonight';
       return `
         <div id="stars" class="layer"></div>
         <svg id="const" class="layer" width="720" height="1280"></svg>
         ${topRow('MIAMI ART WEEK')}
         <div class="bigword" style="top:282px" data-a="fade" data-t="0.6">${hero}</div>
-        ${headline(['Under the', '<em>Stars</em>'], 318, 118)}
-        <div class="sub" style="top:560px;width:560px;font-size:28px;line-height:34px" data-a="fade" data-t="1.6">${sub}</div>
-        <div class="details" style="top:${v === 'thanks' ? 680 : 650}px">${rows.map(([k, t], i) => `<div class="r" data-a="slide" data-t="${2.0 + i * 0.16}"><span>${k}</span><span>${t}</span></div>`).join('')}</div>
-        ${v === 'thanks' ? cta(955, 'SEE THE NEXT EVENT', 'arrow', 'friendsofmed.com/events')
-                         : cta(955, 'RSVP · LINK IN BIO', 'arrow', 'Free for FOM Portal members, with approval.')}
+        ${headline(copy.head, 318, two ? 96 : 118)}
+        <div class="sub" style="top:${two ? 530 : 560}px;width:560px;font-size:${v === 'thanks' ? 34 : 28}px;line-height:${v === 'thanks' ? 40 : 34}px" data-a="fade" data-t="1.6">${copy.sub}</div>
+        <div class="details" style="top:${two ? 700 : v === 'thanks' ? 690 : 650}px">${copy.rows.map(([k, t], i) => `<div class="r" data-a="slide" data-t="${2.0 + i * 0.16}"><span>${k}</span><span>${t}</span></div>`).join('')}</div>
+        ${copy.cta}
         ${footer()}`;
     },
     thisorthat: () => {
@@ -413,7 +425,7 @@
         ${headline(['Who’s in', '<em>the room</em>'], 290, 104)}
         <div class="sub" style="top:510px;width:560px;font-size:30px;line-height:36px" data-a="fade" data-t="1.4">Every Friends of Medicine event brings these worlds together:</div>
         <div class="chips" style="top:610px">${who.map(([w, k], i) => `<span class="${k ? 'k' : ''}" data-a="pop" data-t="${1.8 + i * 0.09}">${w}</span>`).join('')}</div>
-        ${cta(955, 'JOIN THE PORTAL', 'arrow', 'friendsofmed.com/portal')}
+        ${cta(955, 'STAY TUNED', 'arrow', 'Our next official event is coming soon.')}
         ${footer()}`;
     },
     overheard: () => {
@@ -432,7 +444,7 @@
     },
     artweekend: () => {
       stage.className = 'light';
-      const items = ['See one piece that stops you in your tracks.', 'Bring a friend from outside medicine.', 'Water between every gallery.', 'Keep Sunday slow.'];
+      const items = ['Art Basel <i>Miami Beach Convention Center</i>', 'Untitled Art <i>Ocean Drive at 12th St</i>', 'Design Miami <i>Convention Center Dr</i>', 'Art Miami <i>through Sunday</i>'];
       return `
         <svg class="layer" width="720" height="1280"><defs>
           <filter id="wc5"><feTurbulence type="fractalNoise" baseFrequency="0.011" numOctaves="3" seed="31"/><feDisplacementMap in="SourceGraphic" scale="44"/></filter></defs>
@@ -440,9 +452,9 @@
           <rect x="560" y="980" width="220" height="220" fill="#1f6e66" filter="url(#wc5)" opacity="0.85" transform="rotate(12 670 1090)"/></svg>
         ${topRow('MIAMI ART WEEK')}
         ${headline(['Your Art Week', '<em>weekend</em>'], 290, 92)}
-        <div class="sub" style="top:490px;width:540px;font-size:30px;line-height:36px" data-a="fade" data-t="1.4">Doctor’s orders for the busiest week in Miami.</div>
+        <div class="sub" style="top:490px;width:560px;font-size:30px;line-height:36px" data-a="fade" data-t="1.4">It’s a busy week in Miami, but that doesn’t mean doctors can’t see some art.</div>
         <div class="nlist" style="top:600px">${items.map((t, i) => `<div class="row" data-a="slide" data-t="${1.9 + i * 0.2}"><span class="num">0${i + 1}</span>${t}</div>`).join('')}</div>
-        ${cta(955, 'SEND THIS TO YOUR ART WEEK CREW', 'arrow', 'Tag who you’re going with.')}
+        ${cta(955, 'SEND AN EVENT TO A DOCTOR FRIEND', 'arrow', 'Going? Tag us @friends_of_medicine')}
         ${footer()}`;
     },
     grateful: () => {
@@ -469,6 +481,19 @@
         <div class="sub" style="top:765px;font-size:46px;line-height:50px;font-style:normal" data-a="pop" data-t="5.2">Dr. Andr\u00E9 Coombs</div>
         <div class="caps" style="position:absolute;left:67px;top:830px;color:var(--glow)" data-a="fade" data-t="5.6">FOUNDER, FRIENDS OF MEDICINE</div>
         ${cta(955, 'SHARE IT FORWARD', 'arrow', 'Send this to someone who lifts others up.')}
+        ${footer()}`;
+    },
+    sunsetup: () => {
+      stage.className = 'dark warm';
+      const items = ['Look at your calendar before Monday does.', 'Pick the one win that makes the week.', 'Prep one meal. Lay out one outfit.', 'Lights out on time tonight.'];
+      return `
+        <div id="stars" class="layer"></div>
+        <div class="horizon" id="horizon"></div>
+        ${topRow('SUNDAY RESET')}
+        ${headline(['Set yourself up', '<em>for the week</em>'], 280, 90)}
+        <div class="sub" style="top:480px;width:540px;font-size:34px;line-height:40px" data-a="fade" data-t="1.5">Ten quiet minutes tonight. A calmer week ahead.</div>
+        <div class="nlist" style="top:620px">${items.map((t, i) => `<div class="row" data-a="slide" data-t="${2.2 + i * 0.22}"><span class="num">0${i + 1}</span>${t}</div>`).join('')}</div>
+        ${cta(950, 'SAVE THIS FOR SUNDAY NIGHT', 'arrow', 'Send it to someone with a big week ahead.')}
         ${footer()}`;
     },
     sunrest: () => {
@@ -540,7 +565,7 @@
     const groups = [[[470, 150], [540, 120], [610, 170], [660, 140], [690, 230]], [[520, 860], [600, 820], [660, 900], [700, 860]], [[30, 1150], [110, 1120], [180, 1170]]];
     let svg = '';
     groups.forEach((g, gi) => g.forEach((pt, i) => {
-      if (i) { const q = g[i - 1]; svg += `<line x1="${q[0]}" y1="${q[1]}" x2="${pt[0]}" y2="${pt[1]}" stroke="rgba(224,168,90,0.45)" stroke-width="1" data-g="${gi}" data-i="${i}"/>`; }
+      if (i) { const q = g[i - 1]; svg += `<line x1="${q[0]}" y1="${q[1]}" x2="${pt[0]}" y2="${pt[1]}" stroke="${stage.classList.contains('pink') ? 'rgba(255,46,147,0.55)' : 'rgba(224,168,90,0.45)'}" stroke-width="1" data-g="${gi}" data-i="${i}"/>`; }
       svg += `<circle cx="${pt[0]}" cy="${pt[1]}" r="2.6" fill="#f3d9a8"/>`;
     }));
     cons.innerHTML = svg; CONS.push(...cons.querySelectorAll('line'));

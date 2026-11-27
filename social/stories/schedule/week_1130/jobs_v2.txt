@@ -1,0 +1,9 @@
+01_Mon_1130_1000_Week_At_A_Glance_v2|glance
+02_Mon_1130_1800_Under_The_Stars_Invite_v2|stars&v=invite
+03_Tue_1201_1000_Tech_Tuesday_v2|tue&quote=There%E2%80%99s%20so%20much%20that%20I%20don%E2%80%99t%20know.%20And%20if%20I%20can%20glean%20some%20of%20that%20information%20from%20someone%20in%20a%20completely%20different%20field%2C%20that%20benefits%20me.&by=DR.%20ALEJANDRO%20BADIA%3Cbr%3EORTHOPEDIC%20HAND%20SURGEON
+04_Tue_1201_1800_Under_The_Stars_Tomorrow_v2|stars&v=tomorrow
+05_Wed_1202_1000_Tonight_We_Come_Together_v2|stars&v=tonight
+06_Thu_1203_1000_Whos_In_The_Room_v2|room
+07_Thu_1203_1800_Under_The_Stars_Thank_You_v2|stars&v=thanks
+09_Sat_1205_1000_Your_Art_Week_Weekend_v2|artweekend
+10_Sun_1206_1800_Sunday_Reset_v2|sunsetup

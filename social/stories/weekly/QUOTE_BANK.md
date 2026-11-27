@@ -10,6 +10,7 @@ so check each quote against its reel before posting. Get the speaker's OK before
 | Wellness Wednesday | "Sometimes you've got to set that weight down and just relax for a minute." | Dr. Alexa Rose, pediatric neurosurgeon | https://www.instagram.com/p/DfVo8djxiW9/ |
 | Wellness Wednesday, week 2 | "Do an honest self-inquiry. How are you feeling in life? How are you showing up in life?" | Dr. Rudy Eberwein (@drrudybestlife) | https://www.instagram.com/p/DHmIpm8S0wo/ |
 | Founders Friday | "In the business of healthcare, the most important hand is the one you don't shake." | Dr. André Coombs, founder | https://www.instagram.com/p/DUaFuw3jlRC/ |
+| Tech Tuesday, Dec 1 | "There's so much that I don't know. And if I can glean some of that information from someone in a completely different field, that benefits me." | Dr. Alejandro Badia (@badiahand), orthopedic hand surgeon | https://www.instagram.com/p/DekPKxHqDl9/ |
 | Founders Friday, week 2 | "My lowest point was not the end of my story. It was the beginning of my becoming." | Dr. André Coombs, founder | https://www.instagram.com/p/DcyS33NtBG2/ |
 
 ## Wellness Wednesday ideas
@@ -26,9 +27,8 @@ so check each quote against its reel before posting. Get the speaker's OK before
 | Quote | Speaker | Reel |
 |---|---|---|
 | "If you experience success, you should be able to share that with others and it all comes back to you." | Guest on Money and Medicine, not named | https://www.instagram.com/p/DfilAF-xc9-/ |
-| "There's so much that I don't know. And if I can glean some of that information from someone in a completely different field, that benefits me." | Surgeon, not named | https://www.instagram.com/p/DekPKxHqDl9/ |
 | "I walked into the room not looking for a job, and I actually walked out with a life-changing opportunity." | Physician assistant, not named | https://www.instagram.com/p/Dd1rCp0tRxC/ |
-| "We often don't have a chance in our busy professions to really meet people who can help us with needs that we may have." | Dr. Alejandro Badilla (spelling from transcript), orthopedic hand surgeon | https://www.instagram.com/p/DHeh80dySWD/ |
+| "We often don't have a chance in our busy professions to really meet people who can help us with needs that we may have." | Dr. Alejandro Badia (@badiahand), orthopedic hand surgeon | https://www.instagram.com/p/DHeh80dySWD/ |
 
 ## Unwind Thursday and community ideas
 
