@@ -110,6 +110,45 @@
   .elevens { position: absolute; right: 67px; top: 790px; font-family: 'Cormorant'; font-weight: 500; font-size: 120px; line-height: 1;
              color: transparent; -webkit-text-stroke: 1.5px rgba(224,168,90,0.45); letter-spacing: -0.02em; }
   .dark .gold, .gold { color: var(--gold); }
+  /* Week of Nov 30: Art Week formats */
+  .night { background: radial-gradient(120% 80% at 70% 10%, #13213d 0%, #070b16 50%, #020308 100%); color: var(--cream); }
+  .night .kicker, .night .headline em, .night .cta .note { color: var(--gold); }
+  .night .pill { border: 1.5px solid var(--gold); color: var(--cream); box-shadow: 0 0 24px rgba(224,168,90,0.22); }
+  .night .footer { color: var(--cream); }
+  .details { position: absolute; left: 67px; width: 586px; }
+  .details .r { display: flex; align-items: baseline; gap: 14px; padding: 9px 0; border-bottom: 1px solid rgba(224,168,90,0.22); }
+  .details .r span:first-child { flex: none; width: 76px; font-family: 'Inter'; font-weight: 600; font-size: 11px; letter-spacing: 0.22em; color: var(--gold); }
+  .details .r span:last-child { font-family: 'Cormorant'; font-weight: 500; font-size: 27px; line-height: 1.15; }
+  .bigword { position: absolute; left: 67px; font-family: 'Inter'; font-weight: 700; font-size: 15px; letter-spacing: 0.34em; color: var(--gold); }
+
+  .cal { position: absolute; left: 67px; width: 586px; }
+  .cal .d { display: grid; grid-template-columns: 64px 1fr; align-items: center; height: 54px; border-bottom: 1px solid rgba(10,21,19,0.13); }
+  .cal .d b { font-family: 'Inter'; font-weight: 600; font-size: 12px; letter-spacing: 0.2em; color: var(--teal); }
+  .cal .d span { font-family: 'Cormorant'; font-weight: 500; font-size: 27px; }
+  .cal .d span i { font-family: 'Inter'; font-style: normal; font-size: 13px; letter-spacing: 0.06em; color: rgba(10,21,19,0.55); margin-left: 8px; }
+  .cal .d.hl { background: var(--ink); color: var(--cream); border-radius: 12px; padding: 0 14px; margin: 4px -14px; border: 0; }
+  .cal .d.hl b { color: var(--gold); } .cal .d.hl span i { color: rgba(239,230,213,0.7); }
+
+  .vs { position: absolute; left: 67px; width: 586px; display: flex; flex-direction: column; gap: 18px; }
+  .vs .opt { position: relative; border: 1.5px solid rgba(63,165,151,0.55); border-radius: 22px; padding: 24px 26px; }
+  .vs .opt small { display: block; font-family: 'Inter'; font-size: 11px; letter-spacing: 0.26em; color: var(--glow); margin-bottom: 8px; }
+  .vs .opt span { font-family: 'Cormorant'; font-weight: 500; font-size: 40px; line-height: 1.05; }
+  .vs .or { align-self: center; width: 58px; height: 58px; border-radius: 50%; background: var(--glow); color: var(--ink); display: flex; align-items: center; justify-content: center;
+            font-family: 'Cormorant'; font-style: italic; font-weight: 600; font-size: 28px; margin: -6px 0; }
+
+  .chips { position: absolute; left: 67px; width: 586px; display: flex; flex-wrap: wrap; gap: 10px; }
+  .chips span { font-family: 'Inter'; font-weight: 500; font-size: 17px; padding: 10px 16px; border-radius: 999px; border: 1.5px solid rgba(10,21,19,0.25); }
+  .chips span.k { background: var(--teal); border-color: var(--teal); color: var(--cream); }
+
+  .card { position: absolute; left: 67px; width: 586px; box-sizing: border-box; padding: 26px 30px 28px; background: var(--cream); color: var(--ink);
+          border-radius: 6px; box-shadow: 0 24px 50px rgba(0,0,0,0.45); transform-origin: 30% 50%; }
+  .card small { display: block; font-family: 'Inter'; font-weight: 600; font-size: 11px; letter-spacing: 0.3em; color: var(--teal); padding-bottom: 12px;
+                border-bottom: 1px solid rgba(10,21,19,0.2); margin-bottom: 14px; }
+  .card p { margin: 0; font-family: 'Cormorant'; font-style: italic; font-weight: 500; font-size: 33px; line-height: 1.22; }
+  .card .by { margin-top: 16px; font-family: 'Inter'; font-size: 12px; letter-spacing: 0.24em; color: var(--teal); }
+
+  .askbox { position: absolute; left: 67px; width: 586px; height: 150px; box-sizing: border-box; border: 2px dashed rgba(224,168,90,0.5); border-radius: 22px;
+            display: flex; align-items: center; justify-content: center; font-family: 'Inter'; font-size: 12px; letter-spacing: 0.24em; color: rgba(224,168,90,0.75); }
 </style>
 </head>
 <body>
@@ -318,6 +357,106 @@
         ${footer()}`;
     },
     // Sunday, second concept: rest as part of the work, three slow rituals.
+    // ===== Week of Nov 30, 2026: Miami Art Week and Under the Stars (Dec 2) =====
+    glance: () => {
+      stage.className = 'light';
+      const days = [['MON', 'Week at a glance'], ['TUE', 'Tech Tuesday: This or That'], ['WED', 'Under the Stars <i>Basel Edition</i>', 1],
+                    ['THU', 'Who’s in the room'], ['FRI', 'Founders Friday'], ['SAT', 'Your Art Week weekend'], ['SUN', 'One thing you’re grateful for']];
+      return `
+        ${topRow('MIAMI ART WEEK')}
+        ${headline(['Your week', '<em>at a glance</em>'], 290, 92)}
+        <div class="cal" style="top:500px">${days.map(([d, t, hl], i) => `<div class="d${hl ? ' hl' : ''}" data-a="slide" data-t="${1.4 + i * 0.16}"><b>${d}</b><span>${t}</span></div>`).join('')}</div>
+        ${cta(955, 'SAVE THE DATE: DEC 2', 'arrow', 'Under the Stars. Link in bio to RSVP.')}
+        ${footer()}`;
+    },
+    stars: () => {
+      stage.className = 'night';
+      const v = params.get('v') || 'invite';
+      const hero = { invite: 'YOU’RE INVITED', tomorrow: 'TOMORROW NIGHT', tonight: 'TONIGHT', thanks: 'THANK YOU' }[v];
+      const rows = v === 'thanks'
+        ? [['WHEN', 'Wednesday, Dec 2'], ['WHERE', 'National Hotel, Miami Beach'], ['FOR', 'St. Jude Children’s Research Hospital']]
+        : [['DATE', 'Wednesday, Dec 2'], ['TIME', '7 PM to 1 AM'], ['PLACE', 'National Hotel, Miami Beach'], ['MUSIC', 'UZO + Dayah Modo'], ['CAUSE', 'St. Jude Children’s Research Hospital']];
+      const sub = v === 'thanks' ? 'For a night of art, music and connection, for a cause close to our hearts.'
+                                 : 'Basel Edition, presented by Nolcha Shows. Friends of Medicine is an official partner.';
+      return `
+        <div id="stars" class="layer"></div>
+        <svg id="const" class="layer" width="720" height="1280"></svg>
+        ${topRow('MIAMI ART WEEK')}
+        <div class="bigword" style="top:282px" data-a="fade" data-t="0.6">${hero}</div>
+        ${headline(['Under the', '<em>Stars</em>'], 318, 118)}
+        <div class="sub" style="top:560px;width:560px;font-size:28px;line-height:34px" data-a="fade" data-t="1.6">${sub}</div>
+        <div class="details" style="top:${v === 'thanks' ? 680 : 650}px">${rows.map(([k, t], i) => `<div class="r" data-a="slide" data-t="${2.0 + i * 0.16}"><span>${k}</span><span>${t}</span></div>`).join('')}</div>
+        ${v === 'thanks' ? cta(955, 'SEE THE NEXT EVENT', 'arrow', 'friendsofmed.com/events')
+                         : cta(955, 'RSVP · LINK IN BIO', 'arrow', 'Free for FOM Portal members, with approval.')}
+        ${footer()}`;
+    },
+    thisorthat: () => {
+      stage.className = 'dark';
+      return `
+        <canvas id="mesh" class="layer" width="1080" height="1920" style="width:720px;height:1280px;opacity:0.35"></canvas>
+        ${topRow('TECH TUESDAY')}
+        ${headline(['This', '<em>or that?</em>'], 280, 110)}
+        <div class="vs" style="top:510px">
+          <div class="opt" data-a="slide" data-t="1.5"><small>THIS</small><span>An AI scribe writes your notes</span></div>
+          <div class="or" data-a="pop" data-t="1.9">or</div>
+          <div class="opt" data-a="slide" data-t="2.1"><small>THAT</small><span>You type every note yourself</span></div>
+        </div>
+        ${cta(955, 'VOTE IN THE POLL', 'down', 'Poll sticker goes right below.')}
+        ${footer()}`;
+    },
+    room: () => {
+      stage.className = 'light';
+      const who = [['Physicians', 1], ['Surgeons'], ['Nurses'], ['PAs and NPs'], ['Dentists'], ['Founders', 1], ['Investors'], ['Attorneys'],
+                   ['Realtors'], ['Finance'], ['Health tech', 1], ['Wellness'], ['Students'], ['Hospital leaders']];
+      return `
+        ${topRow('UNWIND THURSDAY')}
+        ${headline(['Who’s in', '<em>the room</em>'], 290, 104)}
+        <div class="sub" style="top:510px;width:560px;font-size:30px;line-height:36px" data-a="fade" data-t="1.4">Every Friends of Medicine event brings these worlds together:</div>
+        <div class="chips" style="top:610px">${who.map(([w, k], i) => `<span class="${k ? 'k' : ''}" data-a="pop" data-t="${1.8 + i * 0.09}">${w}</span>`).join('')}</div>
+        ${cta(955, 'JOIN THE PORTAL', 'arrow', 'friendsofmed.com/portal')}
+        ${footer()}`;
+    },
+    overheard: () => {
+      stage.className = 'dark';
+      return `
+        <svg id="city" class="layer" width="720" height="1280"></svg>
+        ${topRow('FOUNDERS FRIDAY')}
+        ${headline(['Founders', '<em>Friday</em>'], 280, 118)}
+        <div class="card" style="top:540px" data-a="card" data-t="1.5">
+          <small>OVERHEARD AT FRIENDS OF MEDICINE</small>
+          <p>“Pretty much every time I go to one of these events, I get a good connection.”</p>
+          <div class="by">PEDRO ROJAS • BUSINESS BROKER</div>
+        </div>
+        ${cta(955, 'NOMINATE A FOUNDER', 'mail', 'info@friendsofmed.com')}
+        ${footer()}`;
+    },
+    artweekend: () => {
+      stage.className = 'light';
+      const items = ['See one piece that stops you in your tracks.', 'Bring a friend from outside medicine.', 'Water between every gallery.', 'Keep Sunday slow.'];
+      return `
+        <svg class="layer" width="720" height="1280"><defs>
+          <filter id="wc5"><feTurbulence type="fractalNoise" baseFrequency="0.011" numOctaves="3" seed="31"/><feDisplacementMap in="SourceGraphic" scale="44"/></filter></defs>
+          <circle id="blob" cx="640" cy="250" r="190" fill="#e0a85a" filter="url(#wc5)" opacity="0.8"/>
+          <rect x="560" y="980" width="220" height="220" fill="#1f6e66" filter="url(#wc5)" opacity="0.85" transform="rotate(12 670 1090)"/></svg>
+        ${topRow('MIAMI ART WEEK')}
+        ${headline(['Your Art Week', '<em>weekend</em>'], 290, 92)}
+        <div class="sub" style="top:490px;width:540px;font-size:30px;line-height:36px" data-a="fade" data-t="1.4">Doctor’s orders for the busiest week in Miami.</div>
+        <div class="nlist" style="top:600px">${items.map((t, i) => `<div class="row" data-a="slide" data-t="${1.9 + i * 0.2}"><span class="num">0${i + 1}</span>${t}</div>`).join('')}</div>
+        ${cta(955, 'SEND THIS TO YOUR ART WEEK CREW', 'arrow', 'Tag who you’re going with.')}
+        ${footer()}`;
+    },
+    grateful: () => {
+      stage.className = 'dark warm';
+      return `
+        <div id="stars" class="layer"></div>
+        <div class="horizon" id="horizon"></div>
+        ${topRow('SUNDAY RESET')}
+        ${headline(['One thing you’re', '<em>grateful for</em>'], 280, 86)}
+        <div class="sub" style="top:480px;width:540px;font-size:32px;line-height:38px" data-a="fade" data-t="1.5">this week. Big or small. Tell us below.</div>
+        <div class="askbox" style="top:620px${params.has('final') ? ';border-color:transparent' : ''}" data-a="fade" data-t="2.2">${params.has('final') ? '' : 'QUESTION STICKER GOES HERE'}</div>
+        ${cta(955, 'ANSWER BELOW', 'down', 'We’ll share a few next week.')}
+        ${footer()}`;
+    },
     sunrest: () => {
       stage.className = 'dark warm';
       const items = ['Make a breakfast worth sitting down for.', 'Put one fun thing on this week\u2019s calendar.', 'Text someone you\u2019re grateful for.'];
@@ -378,6 +517,20 @@
     d.innerHTML = `<path d="M12 2C7 6 4 10 5 15c1 4 4 6 7 7 3-1 6-3 7-7 1-5-2-9-7-13z" fill="${colors[i % 4]}"/><path d="M12 4v18" stroke="rgba(0,0,0,0.25)" stroke-width="1"/>`;
     d.style.position = 'absolute'; leafBox.appendChild(d);
     LEAVES.push({ el: d, x: 380 + rnd() * 360, y0: rnd() * 1400, sp: 40 + rnd() * 50, ph: rnd() * 6, rot: rnd() * 360 });
+  }
+
+  // Under the Stars: a few gold constellations drawn between points.
+  const cons = document.getElementById('const');
+  const CONS = [];
+  if (cons) {
+    const groups = [[[470, 150], [540, 120], [610, 170], [660, 140], [690, 230]], [[520, 860], [600, 820], [660, 900], [700, 860]], [[30, 1150], [110, 1120], [180, 1170]]];
+    let svg = '';
+    groups.forEach((g, gi) => g.forEach((pt, i) => {
+      if (i) { const q = g[i - 1]; svg += `<line x1="${q[0]}" y1="${q[1]}" x2="${pt[0]}" y2="${pt[1]}" stroke="rgba(224,168,90,0.45)" stroke-width="1" data-g="${gi}" data-i="${i}"/>`; }
+      svg += `<circle cx="${pt[0]}" cy="${pt[1]}" r="2.6" fill="#f3d9a8"/>`;
+    }));
+    cons.innerHTML = svg; CONS.push(...cons.querySelectorAll('line'));
+    CONS.forEach(l => { const len = Math.hypot(l.x2.baseVal.value - l.x1.baseVal.value, l.y2.baseVal.value - l.y1.baseVal.value); l.style.strokeDasharray = len; l.dataset.len = len; });
   }
 
   // Sunday night stars.
@@ -469,6 +622,7 @@
         case 'slide': el.style.opacity = p; el.style.transform = `translateX(${(1 - p) * -18}px)`; break;
         case 'pop': el.style.opacity = p; el.style.transform = `scale(${0.92 + 0.08 * p})`; el.style.transformOrigin = 'left center'; break;
         case 'draw': el.style.transform = `scaleX(${p})`; break;
+        case 'card': el.style.opacity = p; el.style.transform = `rotate(${-2.5 * p}deg) translateY(${(1 - p) * 30}px)`; break;
         case 'write': el.style.clipPath = `inset(-10px ${100 - prog(t, s, s + 0.7) * 100}% -10px 0)`; break;
         case 'stamp': { const q = prog(t, s, s + 0.25); el.style.opacity = q; el.style.transform = `rotate(-12deg) scale(${1.7 - 0.7 * easeOut(q)})`; break; }
       }
@@ -525,6 +679,7 @@
       const y = ((l.y0 + t * l.sp) % 1450) - 120, x = l.x + Math.sin(t * 0.9 + l.ph) * 40;
       Object.assign(l.el.style, { left: `${x}px`, top: `${y}px`, opacity: 0.7 * easeOut(prog(t, 0.2, 1.8)), transform: `rotate(${l.rot + t * 30}deg)` });
     });
+    CONS.forEach(l => { const st = 0.8 + (+l.dataset.g) * 0.5 + (+l.dataset.i) * 0.25; l.style.strokeDashoffset = l.dataset.len * (1 - easeOut(prog(t, st, st + 0.6))); });
     STARS.forEach(st => { st.el.style.opacity = easeOut(prog(t, 0.2, 2)) * (0.35 + 0.65 * Math.abs(Math.sin(t * st.sp + st.ph))); });
     const hz = document.getElementById('horizon');
     if (hz) { const p = easeOut(prog(t, 0, 2.5)); hz.style.opacity = p; hz.style.transform = `translateY(${(1 - p) * 60}px)`; }
