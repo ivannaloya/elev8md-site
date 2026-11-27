@@ -9,7 +9,10 @@ Every time Ivanna asks for weekly stories:
    Templates: `social/stories/weekly/weekly.html`, event flyer style: `social/stories/event-thanksgiving/event.html`.
    Quotes: `social/stories/weekly/QUOTE_BANK.md`. Posting times: 10 AM ET for the series, 6 PM ET for promos (Metricool best times).
 3. Mark every story that needs an Instagram link sticker; those have to be posted by hand.
-4. Render animated videos only (no stills). Present them to Andre in the **swipe review page**
+4. Render animated videos only (no stills). **Review happens in Google Drive** (the review page did not work for Ivanna and Andre):
+   one folder per week, videos named `NN Day Mon DD, time, Title.mp4`, plus a READ ME with the plan, the reasoning and
+   which stories need stickers posted by hand. Drive can't overwrite a file, so a fix is uploaded as `(FINAL)` and the old
+   copy must be deleted. The older review page, kept for reference only:
    (`social/stories/review/review.html`, published as an artifact with the `db` capability): one story at a time,
    Good to post / Needs changes, plus notes. The page carries the short plan and the reasoning, so Ivanna only
    needs one line to send Andre with the link.
