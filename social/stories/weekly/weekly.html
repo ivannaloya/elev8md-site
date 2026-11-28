@@ -364,7 +364,7 @@
     // ===== Week of Nov 30, 2026: Miami Art Week and Under the Stars (Dec 2) =====
     glance: () => {
       stage.className = 'light';
-      const days = [['MON', 'Miami Art Week begins'], ['TUE', 'Art Miami + Design Miami open'], ['WED', 'Under the Stars <i>Basel Edition</i>', 1],
+      const days = params.get('rows') ? params.get('rows').split('|').map(r => { const [d, t, hl] = r.split('::'); return [d, t, hl ? 1 : 0]; }) : [['MON', 'Miami Art Week begins'], ['TUE', 'Art Miami + Design Miami open'], ['WED', 'Under the Stars <i>Basel Edition</i>', 1],
                     ['THU', 'Art Basel preview days'], ['FRI', 'Art Basel opens to the public'], ['SAT', 'Untitled Art on Ocean Drive'], ['SUN', 'Art Basel closing day']];
       return `
         ${topRow('MIAMI ART WEEK')}
@@ -376,14 +376,14 @@
     stars: () => {
       stage.className = 'night pink';
       const v = params.get('v') || 'invite';
-      const hero = { invite: 'YOU’RE INVITED', tomorrow: 'TOMORROW NIGHT', tonight: 'TONIGHT', thanks: 'THANK YOU' }[v];
+      const hero = { invite: 'YOU’RE INVITED', tomorrow: 'LAST CALL', tonight: 'TONIGHT', thanks: 'THANK YOU' }[v];
       const full = [['DATE', 'Wednesday, Dec 2'], ['TIME', '7 PM to 1 AM'], ['PLACE', 'National Hotel, Miami Beach'], ['MUSIC', 'UZO + Dayah Modo'], ['CAUSE', 'St. Jude Children’s Research Hospital']];
-      const short = [['WHEN', 'Tonight, 7 PM to 1 AM'], ['WHERE', 'National Hotel, Miami Beach'], ['FOR', 'St. Jude Children’s Research Hospital']];
+      const short = [['WHEN', 'Tonight, 7 PM to 1 AM'], ['WHERE', 'National Hotel, Miami Beach'], ...(params.get('dress') ? [['DRESS', params.get('dress')]] : []), ['FOR', 'St. Jude Children’s Research Hospital']];
       const past = [['WHEN', 'Wednesday, Dec 2'], ['WHERE', 'National Hotel, Miami Beach'], ['FOR', 'St. Jude Children’s Research Hospital']];
       const copy = {
         invite:   { head: ['Under the', '<em>Stars</em>'], sub: 'Basel Edition, presented by Nolcha Shows. Friends of Medicine is an official partner.', rows: full,
                     cta: cta(955, 'RSVP BY DM', 'arrow') },
-        tomorrow: { head: ['Under the', '<em>Stars</em>'], sub: 'Basel Edition, presented by Nolcha Shows. Friends of Medicine is an official partner.', rows: full,
+        tomorrow: { head: ['Under the', '<em>Stars</em>'], sub: 'A night you don’t want to miss, filled with art performances that contribute to a greater cause.', rows: [['WHEN', 'Tomorrow, 7 PM to 1 AM'], ['WHERE', 'National Hotel, Miami Beach'], ['FOR', 'St. Jude Children’s Research Hospital']],
                     cta: cta(955, 'RSVP BY DM', 'arrow', 'Your last chance to join us.') },
         tonight:  { head: ['Tonight we', '<em>come together</em>'], sub: 'Under the Stars, Basel Edition. We’re very grateful to be partnering with Nolcha Shows on this, and we’d love to see you there.', rows: short,
                     cta: cta(955, 'RSVP BY DM', 'arrow', 'See you tonight.') },
@@ -444,7 +444,7 @@
     },
     artweekend: () => {
       stage.className = 'light';
-      const items = ['Art Basel <i>Miami Beach Convention Center</i>', 'Untitled Art <i>Ocean Drive at 12th St</i>', 'Design Miami <i>Convention Center Dr</i>', 'Art Miami <i>through Sunday</i>'];
+      const items = params.get('items') ? params.get('items').split('|') : ['Art Basel <i>Miami Beach Convention Center</i>', 'Untitled Art <i>Ocean Drive at 12th St</i>', 'Design Miami <i>Convention Center Dr</i>', 'Art Miami <i>through Sunday</i>'];
       return `
         <svg class="layer" width="720" height="1280"><defs>
           <filter id="wc5"><feTurbulence type="fractalNoise" baseFrequency="0.011" numOctaves="3" seed="31"/><feDisplacementMap in="SourceGraphic" scale="44"/></filter></defs>
