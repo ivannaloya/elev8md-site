@@ -370,23 +370,23 @@
         ${topRow('MIAMI ART WEEK')}
         ${headline(['Your week', '<em>at a glance</em>'], 290, 92)}
         <div class="cal" style="top:500px">${days.map(([d, t, hl], i) => `<div class="d${hl ? ' hl' : ''}" data-a="slide" data-t="${1.4 + i * 0.16}"><b>${d}</b><span>${t}</span></div>`).join('')}</div>
-        ${cta(955, 'SAVE THE DATE: DEC 2', 'arrow', 'Under the Stars. RSVP by DM.')}
+        ${cta(955, 'SAVE THE DATE: DEC 2', 'arrow', 'Under the Stars. RSVP at luma.com/Underthestars')}
         ${footer()}`;
     },
     stars: () => {
       stage.className = 'night pink';
       const v = params.get('v') || 'invite';
       const hero = { invite: 'YOU’RE INVITED', tomorrow: 'LAST CALL', tonight: 'TONIGHT', thanks: 'THANK YOU' }[v];
-      const full = [['DATE', 'Wednesday, Dec 2'], ['TIME', '7 PM to 1 AM'], ['PLACE', 'National Hotel, Miami Beach'], ['MUSIC', 'UZO + Dayah Modo'], ['CAUSE', 'St. Jude Children’s Research Hospital']];
-      const short = [['WHEN', 'Tonight, 7 PM to 1 AM'], ['WHERE', 'National Hotel, Miami Beach'], ...(params.get('dress') ? [['DRESS', params.get('dress')]] : []), ['FOR', 'St. Jude Children’s Research Hospital']];
+      const full = [['DATE', 'Wednesday, Dec 2'], ['ENTRY', '9 PM to 1 AM'], ['PLACE', 'National Hotel, Miami Beach'], ['MUSIC', 'DJEN, DJ UZO + Dayah Modo'], ['CAUSE', 'St. Jude Children’s Research Hospital']];
+      const short = [['ENTRY', 'Tonight, 9 PM to 1 AM'], ['WHERE', 'National Hotel, Miami Beach'], ...(params.get('dress') ? [['DRESS', params.get('dress')]] : []), ['FOR', 'St. Jude Children’s Research Hospital']];
       const past = [['WHEN', 'Wednesday, Dec 2'], ['WHERE', 'National Hotel, Miami Beach'], ['FOR', 'St. Jude Children’s Research Hospital']];
       const copy = {
-        invite:   { head: ['Under the', '<em>Stars</em>'], sub: 'Basel Edition, presented by Nolcha Shows. Friends of Medicine is an official partner.', rows: full,
-                    cta: cta(955, 'RSVP BY DM', 'arrow') },
-        tomorrow: { head: ['Under the', '<em>Stars</em>'], sub: 'A night you don’t want to miss, filled with art performances that contribute to a greater cause.', rows: [['WHEN', 'Tomorrow, 7 PM to 1 AM'], ['WHERE', 'National Hotel, Miami Beach'], ['FOR', 'St. Jude Children’s Research Hospital']],
-                    cta: cta(955, 'RSVP BY DM', 'arrow', 'Your last chance to join us.') },
+        invite:   { head: ['Under the', '<em>Stars</em>'], sub: 'Basel Edition, presented by Nolcha Shows. Friends of Medicine is an official networking partner.', rows: full,
+                    cta: cta(955, 'REQUEST TO JOIN', 'down', 'luma.com/Underthestars') },
+        tomorrow: { head: ['Under the', '<em>Stars</em>'], sub: 'A night you don’t want to miss, filled with art performances that contribute to a greater cause.', rows: [['ENTRY', 'Tomorrow, 9 PM to 1 AM'], ['WHERE', 'National Hotel, Miami Beach'], ['FOR', 'St. Jude Children’s Research Hospital']],
+                    cta: cta(955, 'REQUEST TO JOIN', 'down', 'Your last chance to join us. luma.com/Underthestars') },
         tonight:  { head: ['Tonight we', '<em>come together</em>'], sub: 'Under the Stars, Basel Edition. We’re very grateful to be partnering with Nolcha Shows on this, and we’d love to see you there.', rows: short,
-                    cta: cta(955, 'RSVP BY DM', 'arrow', 'See you tonight.') },
+                    cta: cta(955, 'REQUEST TO JOIN', 'down', 'See you tonight. luma.com/Underthestars') },
         thanks:   { head: ['Under the', '<em>Stars</em>'], sub: 'Thank you for joining us. It was a very special night.', rows: past,
                     cta: cta(955, 'RECAP COMING FRIDAY', 'arrow', 'Watch how the night went this Founders Friday.') },
       }[v];
